@@ -9,14 +9,44 @@
          justify-between
          items-center
          backdrop-blur-sm
+         border-b
+         border-[#222]
          text-white
-         bg-[#000]/50"
+         bg-black/50"
 >
-  <h1 class="font-bold">TigerPay</h1>
+  <a
+    class="font-bold
+           text-lg
+           cursor-pointer
+           hover:font-extrabold
+           hover:scale-105
+           duration-200"
+  >TigerPay</a>
 
-  <span class="flex flex-row justify-between">
-    <a routerLink="/" class="mr-5">Log In</a>
-    <a routerLink="/" class="mr-5">Sign Up</a>
-    <a routerLink="/">About</a>
+  <span
+    class="flex
+           flex-row
+           justify-between"
+  >
+    <a
+      routerLink="/"
+      class="mr-[30px]
+             hover:font-bold
+             hover:scale-105
+             duration-200"
+    >Log In</a>
+    <a
+      routerLink="/"
+      class="mr-[30px]
+             hover:font-bold
+             hover:scale-105
+             duration-200"
+    >Sign Up</a>
+    <a
+      routerLink="/"
+      class="hover:font-bold
+             hover:scale-105
+             duration-200"
+    >About</a>
   </span>
 </nav>
