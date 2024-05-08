@@ -1,0 +1,148 @@
+<div
+  class="px-32
+         flex
+         flex-col
+         items-center
+         mt-5
+         justify-center"
+>
+  <div
+    class="w-96
+           border
+           border-dashed
+           pt-8
+           pb-12
+           px-8
+           border-neutral-700"
+  >
+    <h1
+      class="mx-auto
+            text-2xl
+            uppercase
+            font-bold
+            mb-2"
+    >Log In</h1>
+    <form
+      class="
+            justify-between
+            mx-auto"
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+    >
+      <p
+        class="text-red-500
+               font-medium
+               text-xs
+               uppercase
+               absolute
+               blur-sm
+               -z-10"
+        *ngIf="emailAddress.errors?.required && emailAddress.touched"
+      >
+        Email address is required
+      </p>
+      <p
+        class="text-red-500
+             font-medium
+             text-xs
+             uppercase"
+        *ngIf="emailAddress.errors?.required && emailAddress.touched"
+      >
+        Email address is required
+      </p>
+      <p
+        class="text-red-500
+               font-medium
+               text-xs
+               uppercase
+               absolute
+               blur-sm
+               -z-10"
+        *ngIf="emailAddress.errors?.email && emailAddress.touched"
+      >
+        Email address is incorrect
+      </p>
+      <p
+        class="text-red-500
+             font-medium
+             text-xs
+             uppercase"
+        *ngIf="emailAddress.errors?.email && emailAddress.touched"
+      >
+        Email address is incorrect
+      </p>
+      <input
+        type="text"
+        class="border
+              border-white
+              bg-black
+              focus:outline-1
+              py-2
+              px-4
+              mb-5
+              w-full"
+        placeholder="EMAIL ADDRESS"
+        formControlName="emailAddress"
+      >
+      <p
+        class="text-red-500
+               font-medium
+               text-xs
+               uppercase
+               absolute
+               blur-sm
+               -z-10"
+        *ngIf="password.errors?.required && password.touched"
+      >
+        Password is required
+      </p>
+      <p
+        class="text-red-500
+             font-medium
+             text-xs
+             uppercase"
+        *ngIf="password.errors?.required && password.touched"
+      >
+        Password is required
+      </p>
+      <input
+        type="text"
+        class="border
+              border-white
+              bg-black
+              focus:outline-1
+              py-2
+              px-4
+              mb-8
+              w-full"
+        placeholder="PASSWORD"
+        formControlName="password"
+      >
+      <button
+        class="w-full
+              py-2
+              px-4
+              border
+              bg-black
+              text-white
+              font-bold
+              uppercase
+              hover:bg-white 
+              hover:text-black
+              active:bg-black
+              active:text-white
+              disabled:text-neutral-400
+              disabled:border-neutral-400
+              disabled:hover:text-neutral-800
+              disabled:hover:bg-neutral-400
+              disabled:cursor-not-allowed
+              active:duration-150
+              duration-300"
+        type="submit"
+        [disabled]="form.invalid"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
