@@ -1,0 +1,33 @@
+<app-tab-bar
+  [items]="tabBarItems"
+  labelField="label"
+  [active]="activeTab"
+  (onTabSelect)="changeTab($event)"
+></app-tab-bar>
+
+<div
+  class="px-32
+         flex
+         mx-auto"
+>
+  <div
+  >
+    <div
+      *ngIf="activeTab.id === 1"
+    >
+      This is a general section
+    </div>
+
+    <div
+      *ngIf="activeTab.id === 2"
+    >
+      This is an operations section
+    </div>
+
+    <div
+      *ngIf="activeTab.id === 3"
+    >
+      This is a payments section
+    </div>
+  </div>
+</div>

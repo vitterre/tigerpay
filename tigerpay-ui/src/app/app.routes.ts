@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router'
 import { HeroPageComponent } from './pages/hero-page/hero-page.component'
-import { LoginPageComponent } from './pages/login-page/login-page.component'
-import { SignupPageComponent } from './pages/signup-page/signup-page.component'
 
 export const routes: Routes = [
   {
@@ -10,10 +8,17 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginPageComponent
+    loadChildren: () =>
+      import('./pages/login-page/login-page.routes').then(m => m.routes)
   },
   {
     path: 'signup',
-    component: SignupPageComponent
+    loadChildren: () =>
+      import('./pages/signup-page/signup-page.routes').then(m => m.routes)
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () =>
+      import('./pages/dashboard-page/dashboard-page.routes').then(m => m.routes)
   }
 ]
