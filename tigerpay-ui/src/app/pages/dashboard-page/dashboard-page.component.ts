@@ -1,11 +1,12 @@
 import { NgIf } from '@angular/common'
 import { Component } from '@angular/core'
+import { CardComponent } from '../../components/card/card.component'
 import { TabBarComponent } from '../../components/tab-bar/tab-bar.component'
 
 @Component({
   selector: 'app-dashboard-page',
   standalone: true,
-  imports: [TabBarComponent, NgIf],
+  imports: [TabBarComponent, CardComponent, NgIf],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.scss'
 })

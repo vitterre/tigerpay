@@ -8,14 +8,31 @@
 <div
   class="px-32
          flex
+         flex-col
+         mt-8
+         w-full
          mx-auto"
 >
-  <div
-  >
     <div
       *ngIf="activeTab.id === 1"
+      class="w-full flex flex-row animate-on-loading"
     >
-      This is a general section
+      <div
+        class="w-1/4
+               flex
+               flex-col"
+      >
+        <app-card [gradientBg]="true" gridPosition="top-left"></app-card>
+        <app-card class="mt-8" [gradientBg]="true" gridPosition="bottom-left"></app-card>
+      </div>
+
+      <div
+        class="w-3/4
+               flex
+               ml-8"
+      >
+        <app-card class="w-full" [gradientBg]="true" gridPosition="right"></app-card>
+      </div>
     </div>
 
     <div
@@ -29,5 +46,4 @@
     >
       This is a payments section
     </div>
-  </div>
 </div>
