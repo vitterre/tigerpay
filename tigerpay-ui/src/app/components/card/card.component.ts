@@ -10,10 +10,9 @@ import { Component, Input } from '@angular/core'
 })
 export class CardComponent {
   
+  @Input() title: string = 'Card title'
+  @Input() displayTitle: boolean = true
   @Input() gradientBg: boolean = false
-  
-  // left, right, top, bottom, left-top, left-bottom, right-top, right-bottom, center
-
   // right, bottom-right, top-right
   @Input() gridPosition: string = 'center'
 }

@@ -1,0 +1,31 @@
+<button
+  class="border-[#222]
+         border
+         w-full
+         rounded-2xl
+         h-full
+         px-5
+         py-4
+         shadow-lg
+         bg-neutral-900
+         hover:bg-neutral-800
+         hover:border-[#333]
+         active:bg-neutral-900
+         active:duration-150
+         duration-300"
+>
+  <div
+    class="flex
+           flex-row
+           justify-center"
+  >
+    <img
+      [src]="iconUrl"
+      *ngIf="iconUrl !== ''"
+      width="16"
+      height="16"
+      class="mr-2"
+    >
+    <h1>{{ label }}</h1>
+  </div>
+</button>

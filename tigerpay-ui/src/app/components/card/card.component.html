@@ -5,7 +5,8 @@
          w-full
          rounded-2xl
          h-full
-         p-5
+         px-5
+         py-4
          min-h-36
          shadow-lg
          shadow-black
@@ -15,11 +16,19 @@
     'bg-neutral-950': !gradientBg,
     'gradient-right': gradientBg && gridPosition === 'right',
     'gradient-left': gradientBg && gridPosition === 'left',
+    'gradient-top': gradientBg && gridPosition === 'top',
+    'gradient-bottom': gradientBg && gridPosition === 'bottom',
     'gradient-top-left': gradientBg && gridPosition === 'top-left',
     'gradient-bottom-left': gradientBg && gridPosition === 'bottom-left',
   }"
 >
-  <p>
-    Card content
-  </p>
+  <h1
+    class="text-lg font-bold mb-2"
+    *ngIf="displayTitle"
+  >
+    {{ title }}
+  </h1>
+  <div>
+    <ng-content></ng-content>
+  </div>
 </div>

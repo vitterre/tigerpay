@@ -1,0 +1,41 @@
+<div
+  class="z-20
+         w-full
+         h-full
+         bg-neutral-900/20
+         backdrop-blur-md
+         flex
+         flex-col
+         fixed
+         top-0
+         left-0
+         right-0
+         bottom-0
+         overflow-hidden"
+  [@modalAnimation]
+  *ngIf="modalService.isVisible$ | async"
+>
+  <div
+    class="absolute
+           w-full h-full
+           -z-20"
+    (click)="modalService.close()"
+  >
+  </div>
+    <div
+      class="w-96
+            border
+            border-[#222]
+            rounded
+            h-96
+            px-8
+            py-8
+            bg-neutral-950
+            shadow-black
+            shadow-2xl
+            mx-auto
+            mt-20"
+    >
+      <ng-content></ng-content>
+    </div>
+</div>

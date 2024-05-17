@@ -5,8 +5,12 @@
   (onTabSelect)="changeTab($event)"
 ></app-tab-bar>
 
+<app-modal>
+  <app-transfer-form></app-transfer-form>
+</app-modal>
+
 <div
-  class="px-32
+  class="px-48
          flex
          flex-col
          mt-8
@@ -22,8 +26,52 @@
                flex
                flex-col"
       >
-        <app-card [gradientBg]="true" gridPosition="top-left"></app-card>
-        <app-card class="mt-8" [gradientBg]="true" gridPosition="bottom-left"></app-card>
+        <app-card [gradientBg]="true" gridPosition="top-left" title="Balance">
+          <h1
+            class="text-3xl
+                   font-bold
+                   text-green-500/50
+                   absolute
+                   blur-md"
+          >
+            $2563.52
+          </h1>
+          <h1
+            class="text-3xl
+                   font-bold
+                   text-green-500"
+          >
+            $2563.52
+          </h1>
+          <p
+            class="text-neutral-500 text-sm -mt-1"
+          >
+            +$25 last transaction
+          </p>
+        </app-card>
+        <app-card class="mt-8" [gradientBg]="true" gridPosition="bottom-left" title="Transactions">
+          <h1
+            class="text-3xl
+                   font-bold
+                   text-white/30
+                   absolute
+                   blur-md"
+          >
+            23 this month
+          </h1>
+          <h1
+            class="text-3xl
+                   font-bold
+                   text-white"
+          >
+            23 this month
+          </h1>
+          <p
+            class="text-neutral-500 text-sm -mt-1"
+          >
+            $82 average for transaction
+          </p>
+        </app-card>
       </div>
 
       <div
@@ -31,19 +79,188 @@
                flex
                ml-8"
       >
-        <app-card class="w-full" [gradientBg]="true" gridPosition="right"></app-card>
+        <app-card class="w-full" [gradientBg]="true" gridPosition="right" title="Overview">
+          <h1 class="text-lg">
+            Ivanov Ivan Ivanovich
+          </h1>
+          <p class="uppercase text-sm text-neutral-600 -mt-1">Individual</p>
+
+          <h1 class="text-lg font-bold mt-5">
+            Account details
+          </h1>
+          <div
+            class="text-sm
+                   text-neutral-600"
+          >
+            <app-copy-text [payload]="accountUuid"></app-copy-text>
+            <app-copy-text [payload]="accountPhoneNumber"></app-copy-text>
+          </div>
+          <div
+            class="flex
+                   flex-row
+                   justify-between
+                   w-full
+                   mt-4"
+          >
+            <app-card-button
+              class="w-[48%]"
+              label="By phone number"
+              iconUrl="../assets/icons/phone-fill.svg"
+              (click)="changeTab({
+                id: 3,
+                label: 'Payments'
+              }); modalService.open()"
+            ></app-card-button>
+
+            <app-card-button
+              class="w-[48%]"
+              label="By account ID"
+              iconUrl="../assets/icons/user-shared-2-line.svg"
+              (click)="changeTab({
+                id: 3,
+                label: 'Payments'
+              }); modalService.open()"
+            ></app-card-button>
+        </div>
+        </app-card>
       </div>
     </div>
 
     <div
+      class="w-full flex flex-row animate-on-loading"
       *ngIf="activeTab.id === 2"
     >
-      This is an operations section
+      <div
+        class="w-full
+               flex
+               flex-col"
+      >
+        <app-card
+          class="w-full"
+          title="Expense"
+          [gradientBg]="true"
+          gridPosition="top"
+          [displayTitle]="false"
+        >
+          <div
+            class="flex flex-row"
+          >
+            <div
+              class="w-1/2
+                     flex
+                     flex-col"
+            >
+              <h1
+                class="text-lg font-bold mb-2"
+              >
+              Expense
+              </h1>
+              <div
+                class="flex flex-row flex-wrap gap-1"
+              >
+                <app-tag
+                  *ngFor="let tag of expenseTagData; let i = index"
+                  [tag]="tag.tag"
+                  [color]="expenseTagColors[i]"
+                  [extra]="tag.extra"
+                ></app-tag>
+              </div>
+            </div>
+
+            <div
+              class="w-1/2 flex flex-row-reverse"
+            >
+              <app-ring-chart
+                name="expense"
+                class="w-fit"
+                [data]="expenseChartData"
+                [colors]="expenseChartColors"
+              ></app-ring-chart>
+            </div>
+            
+          </div>
+        </app-card>
+        <app-card
+          class="w-full mt-8"
+          title="Revenue"
+          [displayTitle]="false"
+          [gradientBg]="true"
+          gridPosition="bottom"
+        >
+          <div
+            class="flex flex-row"
+          >
+            <div
+              class="w-1/2
+                     flex
+                     flex-col"
+            >
+              <h1
+                class="text-lg font-bold mb-2"
+              >
+                Revenue
+              </h1>
+              <div
+                class="flex flex-row flex-wrap gap-1"
+              >
+                <app-tag
+                  *ngFor="let tag of revenueTagData; let i = index"
+                  [tag]="tag.tag"
+                  [color]="revenueTagColors[i]"
+                  [extra]="tag.extra"
+                ></app-tag>
+              </div>
+            </div>
+
+            <div
+              class="w-1/2 flex flex-row-reverse"
+            >
+              <app-ring-chart
+                name="revenue"
+                [data]="revenueChartData"
+                [colors]="revenueChartColors"
+              ></app-ring-chart>
+            </div>
+            
+          </div>
+        </app-card>
+      </div>
     </div>
 
     <div
+      class="w-full flex flex-row animate-on-loading"
       *ngIf="activeTab.id === 3"
     >
-      This is a payments section
+      <div
+        class="w-4/6
+               mx-auto
+               flex
+               flex-col"
+      >
+        <app-card
+          [gradientBg]="true"
+          gridPosition="top"
+          title="Transfer by phone number"
+        >
+          <app-input-button
+            type="+1"
+            name="Phone number"
+            (click)="modalService.open()"
+          ></app-input-button>
+        </app-card>
+        <app-card
+          class="mt-8"
+          [gradientBg]="true"
+          gridPosition="bottom"
+          title="Transfer by account ID"
+        >
+          <app-input-button
+            type="UUID"
+            name="Account UUID"
+            (click)="modalService.open()"
+          ></app-input-button>
+        </app-card>
+      </div>
+
     </div>
 </div>

@@ -13,3 +13,11 @@
 .gradient-left {
   background: radial-gradient(at right, #121212 25%, #0a0a0a);
 }
+
+.gradient-top {
+  background: radial-gradient(at bottom, #121212 25%, #0a0a0a);
+}
+
+.gradient-bottom {
+  background: radial-gradient(at top, #121212 25%, #0a0a0a);
+}
