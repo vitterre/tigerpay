@@ -1,11 +1,19 @@
 import { Component } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
+import { ButtonComponent } from '../button/button.component'
 import { CheckboxComponent } from '../checkbox/checkbox.component'
+import { TextInputComponent } from '../text-input/text-input.component'
 
 @Component({
   selector: 'app-transfer-form',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CheckboxComponent],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CheckboxComponent,
+    ButtonComponent,
+    TextInputComponent
+  ],
   templateUrl: './transfer-form.component.html',
   styleUrl: './transfer-form.component.scss'
 })

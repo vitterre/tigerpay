@@ -53,7 +53,8 @@
           <h1
             class="text-3xl
                    font-bold
-                   text-white/30
+                   dark:text-white/30
+                   text-black/30
                    absolute
                    blur-md"
           >
@@ -62,7 +63,8 @@
           <h1
             class="text-3xl
                    font-bold
-                   text-white"
+                   text-black
+                   dark:text-white"
           >
             23 this month
           </h1>
@@ -80,12 +82,12 @@
                ml-8"
       >
         <app-card class="w-full" [gradientBg]="true" gridPosition="right" title="Overview">
-          <h1 class="text-lg">
+          <h1 class="text-lg text-black dark:text-white">
             Ivanov Ivan Ivanovich
           </h1>
           <p class="uppercase text-sm text-neutral-600 -mt-1">Individual</p>
 
-          <h1 class="text-lg font-bold mt-5">
+          <h1 class="text-lg font-bold mt-5 text-black dark:text-white">
             Account details
           </h1>
           <div
@@ -105,7 +107,7 @@
             <app-card-button
               class="w-[48%]"
               label="By phone number"
-              iconUrl="../assets/icons/phone-fill.svg"
+              [iconUrl]="getPhoneNumberLogoSrc()"
               (click)="changeTab({
                 id: 3,
                 label: 'Payments'
@@ -115,7 +117,7 @@
             <app-card-button
               class="w-[48%]"
               label="By account ID"
-              iconUrl="../assets/icons/user-shared-2-line.svg"
+              [iconUrl]="getAccountLogoSrc()"
               (click)="changeTab({
                 id: 3,
                 label: 'Payments'
@@ -151,7 +153,7 @@
                      flex-col"
             >
               <h1
-                class="text-lg font-bold mb-2"
+                class="text-lg font-bold mb-2 text-black dark:text-white"
               >
               Expense
               </h1>
@@ -196,7 +198,7 @@
                      flex-col"
             >
               <h1
-                class="text-lg font-bold mb-2"
+                class="text-lg font-bold mb-2 text-black dark:text-white"
               >
                 Revenue
               </h1>

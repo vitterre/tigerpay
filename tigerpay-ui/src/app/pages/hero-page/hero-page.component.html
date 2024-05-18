@@ -23,9 +23,9 @@
                  ml-10
                  uppercase
                  stroke-outline
-                 text-black"
+                 dark:text-black"
         >
-          The <span class="text-white">fastest</span> and <span class="text-white">safest</span> paymest system ever <span class="text-white">existed</span>
+          The <span class="text-black dark:text-white">fastest</span> and <span class="text-black dark:text-white">safest</span> paymest system ever <span class="text-black dark:text-white">existed</span>
         </h1>
       </div>
       <h1
@@ -38,7 +38,8 @@
       >1000x faster</h1>
       <p
         class="text-lg
-               ml-10"
+               ml-10
+               text-black dark:text-white"
       >Powered on
         <a
           href="https://tigerbeetle.com/"
@@ -61,22 +62,24 @@
              justify-center"
     >
       <img
-      src="../assets/tiger-logo-face.svg"
-      alt="Image"
-      class="w-[28rem]
-            h-[28rem]
-            object-cover
-            absolute
-            -z-10
-            blur-3xl
-            mr-4">
+        [src]="getLogoSrc()"
+        alt="Image"
+        class="w-[28rem]
+              h-[28rem]
+              object-cover
+              absolute
+              -z-10
+              blur-sm
+              mr-4"
+      >
       <img
-        src="../assets/tiger-logo-face.svg"
+        [src]="getLogoSrc()"
         alt="Image"
         class="w-[28rem]
                h-[28rem]
                object-cover
-               mr-4">
+               mr-4"
+      >
     </div>
   </div>
 </div>

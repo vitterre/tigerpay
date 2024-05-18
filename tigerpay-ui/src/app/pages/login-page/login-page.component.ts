@@ -1,6 +1,8 @@
 import { NgIf } from '@angular/common'
 import { Component } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
+import { ButtonComponent } from '../../components/button/button.component'
+import { TextInputComponent } from '../../components/text-input/text-input.component'
 import { AuthService } from '../../services/auth.service'
 
 @Component({
@@ -9,7 +11,9 @@ import { AuthService } from '../../services/auth.service'
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf
+    NgIf,
+    ButtonComponent,
+    TextInputComponent
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'

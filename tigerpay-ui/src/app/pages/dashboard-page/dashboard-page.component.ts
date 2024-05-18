@@ -133,4 +133,20 @@ export class DashboardPageComponent {
   public changeTab(tab: any) {
     this.activeTab = tab
   }
+
+  public getPhoneNumberLogoSrc() {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return '../assets/icons/phone-fill-dark.svg'
+    } else {
+      return '../assets/icons/phone-fill.svg'
+    }
+  }
+
+  public getAccountLogoSrc() {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return '../assets/icons/user-shared-2-line-dark.svg'
+    } else {
+      return '../assets/icons/user-shared-2-line.svg'
+    }
+  }
 }

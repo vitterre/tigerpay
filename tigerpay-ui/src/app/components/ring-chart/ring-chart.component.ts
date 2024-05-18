@@ -89,11 +89,13 @@ export class RingChartComponent implements AfterViewInit {
     this.topicValue = document.createElementNS('http://www.w3.org/2000/svg', 'text')
     this.topicValue.setAttribute('x', `${this.centerX}`)
     this.topicValue.setAttribute('y', `${this.centerY + 2}`)
-    this.topicValue.setAttribute('fill', '#eee')
+    // this.topicValue.setAttribute('fill', window.matchMedia('(prefers-color-scheme: dark)').matches ? '#eee' : '#000')
     this.topicValue.setAttribute('text-anchor', 'middle')
     this.topicValue.setAttribute('font-size', '24')
     this.topicValue.textContent = `$${this.totalValue}`
     this.topicValue.classList.add('font-bold')
+    this.topicValue.classList.add('dark:fill-white')
+    this.topicValue.classList.add('fill-black')
     this.svg.appendChild(this.topicValue)
 
     this.topicTitle = document.createElementNS('http://www.w3.org/2000/svg', 'text')

@@ -10,10 +10,12 @@
            text-2xl
            uppercase
            font-bold
+           text-black
+           dark:text-white
            mb-2"
   >Transfer money</h1>
   
-  <input
+  <!-- <input
     type="text"
     class="border
          border-white
@@ -24,13 +26,17 @@
            w-full"
     placeholder="Phone number"
     formControlName="phoneNumber"
-  >
+  > -->
+  <app-text-input
+    placeHolder="PHONE NUMBER"
+    parentFormGroupName="phoneNumber"
+  ></app-text-input>
   <p
     class="mx-auto
-           mt-2
+           mb-4
            text-neutral-600"
   >or</p>
-  <input
+  <!-- <input
     type="text"
     class="border
          border-white
@@ -42,8 +48,12 @@
            w-full"
     placeholder="Account UUID"
     formControlName="accountUuid"
-  >
-  <input
+  > -->
+  <app-text-input
+    placeHolder="ACCOUNT UUID"
+    parentFormGroupName="accountUuid"
+  ></app-text-input>
+  <!-- <input
     type="text"
     class="border
          border-white
@@ -55,36 +65,20 @@
            w-full"
     placeholder="Amount"
     formControlName="amount"
-  >
+  > -->
+  <app-text-input
+    placeHolder="AMOUNT"
+    parentFormGroupName="amount"
+  ></app-text-input>
   <app-checkbox
-    class="mt-4"
     label="Create bill"
     parentFormGroupName="sendBill"
   ></app-checkbox>
-  <button
-        class="w-full
-              py-2
-              px-4
-              mt-4
-              border
-              bg-black
-              text-white
-              font-bold
-              uppercase
-              hover:bg-white 
-              hover:text-black
-              active:bg-black
-              active:text-white
-              disabled:text-neutral-400
-              disabled:border-neutral-400
-              disabled:hover:text-neutral-800
-              disabled:hover:bg-neutral-400
-              disabled:cursor-not-allowed
-              active:duration-150
-              duration-300"
-        type="submit"
-        [disabled]="this.form.invalid || (this.form.value.phoneNumber === '' && this.form.value.accountUuid === '')"
-      >
-        Transfer
-      </button>
+  <app-button
+    class="mt-4"
+    type="submit"
+    [disabledCondition]="this.form.invalid || (this.form.value.phoneNumber === '' && this.form.value.accountUuid === '')"
+    label="Transfer"
+  >
+  </app-button>
 </form>

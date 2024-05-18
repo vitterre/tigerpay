@@ -20,6 +20,8 @@
             text-2xl
             uppercase
             font-bold
+            text-black
+            dark:text-white
             mb-2"
     >Sign Up</h1>
     <form
@@ -50,7 +52,7 @@
       >
         Firstname is required
       </p>
-      <input
+      <!-- <input
         type="text"
         class="border
               border-white
@@ -62,7 +64,11 @@
               w-full"
         placeholder="FIRSTNAME"
         formControlName="firstName"
-      >
+      > -->
+      <app-text-input
+        placeHolder="FIRSTNAME"
+        parentFormGroupName="firstName"
+      ></app-text-input>
       <p
         class="text-red-500
                font-medium
@@ -84,7 +90,7 @@
       >
         Lastname is required
       </p>
-      <input
+      <!-- <input
         type="text"
         class="border
               border-white
@@ -96,8 +102,12 @@
               w-full"
         placeholder="LASTNAME"
         formControlName="lastName"
-      >
-      <input
+      > -->
+      <app-text-input
+        placeHolder="LASTNAME"
+        parentFormGroupName="lastName"
+      ></app-text-input>
+      <!-- <input
         type="text"
         class="border
               border-white
@@ -109,7 +119,11 @@
               w-full"
         placeholder="MIDDLENAME (OPTIONAL)"
         formControlName="middleName"
-      >
+      > -->
+      <app-text-input
+        placeHolder="MIDDLENAME (OPTIONAL)"
+        parentFormGroupName="middleName"
+      ></app-text-input>
       <p
         class="text-red-500
                font-medium
@@ -152,7 +166,7 @@
       >
         Email address is incorrect
       </p>
-      <input
+      <!-- <input
         type="text"
         class="border
               border-white
@@ -164,7 +178,11 @@
               w-full"
         placeholder="EMAIL ADDRESS"
         formControlName="emailAddress"
-      >
+      > -->
+      <app-text-input
+        placeHolder="EMAIL ADDRESS"
+        parentFormGroupName="emailAddress"
+      ></app-text-input>
       <p
         class="text-red-500
                font-medium
@@ -186,7 +204,7 @@
       >
         Password is required
       </p>
-      <input
+      <!-- <input
         type="text"
         class="border
               border-white
@@ -198,32 +216,16 @@
               w-full"
         placeholder="PASSWORD"
         formControlName="password"
-      >
-      <button
-        class="w-full
-              py-2
-              px-4
-              border
-              bg-black
-              text-white
-              font-bold
-              uppercase
-              hover:bg-white 
-              hover:text-black
-              active:bg-black
-              active:text-white
-              disabled:text-neutral-400
-              disabled:border-neutral-400
-              disabled:hover:text-neutral-800
-              disabled:hover:bg-neutral-400
-              disabled:cursor-not-allowed
-              active:duration-150
-              duration-300"
+      > -->
+      <app-text-input
+        placeHolder="PASSWORD"
+        parentFormGroupName="password"
+      ></app-text-input>
+      <app-button
+        [disabledCondition]="form.invalid"
+        label="Submit"
         type="submit"
-        [disabled]="form.invalid"
-      >
-        Submit
-      </button>
+      ></app-button>
     </form>
   </div>
 </div>

@@ -18,14 +18,15 @@
     <h1
       class="mx-auto
             text-2xl
+            text-black
+            dark:text-white
             uppercase
             font-bold
             mb-2"
     >Log In</h1>
     <form
-      class="
-            justify-between
-            mx-auto"
+      class="justify-between
+             mx-auto"
       [formGroup]="form"
       (ngSubmit)="submit()"
     >
@@ -71,19 +72,10 @@
       >
         Email address is incorrect
       </p>
-      <input
-        type="text"
-        class="border
-              border-white
-              bg-black
-              focus:outline-1
-              py-2
-              px-4
-              mb-5
-              w-full"
-        placeholder="EMAIL ADDRESS"
-        formControlName="emailAddress"
-      >
+      <app-text-input
+        placeHolder="EMAIL ADDRESS"
+        parentFormGroupName="emailAddress"
+      ></app-text-input>
       <p
         class="text-red-500
                font-medium
@@ -105,44 +97,18 @@
       >
         Password is required
       </p>
-      <input
-        type="text"
-        class="border
-              border-white
-              bg-black
-              focus:outline-1
-              py-2
-              px-4
-              mb-8
-              w-full"
-        placeholder="PASSWORD"
-        formControlName="password"
-      >
-      <button
-        class="w-full
-              py-2
-              px-4
-              border
-              bg-black
-              text-white
-              font-bold
-              uppercase
-              hover:bg-white 
-              hover:text-black
-              active:bg-black
-              active:text-white
-              disabled:text-neutral-400
-              disabled:border-neutral-400
-              disabled:hover:text-neutral-800
-              disabled:hover:bg-neutral-400
-              disabled:cursor-not-allowed
-              active:duration-150
-              duration-300"
+      
+      <app-text-input
+        class="mb-8"
+        placeHolder="PASSWORD"
+        parentFormGroupName="password"
+      ></app-text-input>
+      
+      <app-button
+        [disabledCondition]="form.invalid"
+        label="Submit"
         type="submit"
-        [disabled]="form.invalid"
-      >
-        Submit
-      </button>
+      ></app-button>
     </form>
   </div>
 </div>
