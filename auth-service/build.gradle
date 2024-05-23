@@ -1,0 +1,42 @@
+plugins {
+  id 'idea'
+  id 'java'
+}
+
+repositories {
+  mavenCentral()
+  mavenLocal()
+}
+
+subprojects {
+  group = 'com.tigerpay.auth'
+  version = '0.0.1-SNAPSHOT'
+
+  repositories {
+    mavenCentral()
+    mavenLocal()
+  }
+
+  java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+  }
+
+  apply plugin: 'idea'
+  apply plugin: 'java'
+
+  configurations {
+    compileOnly {
+      extendsFrom annotationProcessor
+    }
+  }
+
+  dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+  }
+}
+
+configurations.all {
+  resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}

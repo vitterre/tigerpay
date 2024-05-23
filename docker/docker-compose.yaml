@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  tigerpay-auth-db:
+    image: 'postgres:latest'
+    container_name: 'tigerpay-auth-db'
+    hostname: 'tigerpay-auth-db'
+    environment:
+      POSTGRES_DB: 'tigerpay_auth_db'
+      POSTGRES_USER: 'tigerpay_dev'
+      POSTGRES_PASSWORD: 'tigerpay_dev'
+    ports:
+      - '5432:5432'
