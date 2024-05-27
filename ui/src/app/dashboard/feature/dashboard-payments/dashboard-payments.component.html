@@ -1,0 +1,38 @@
+<div
+  class="w-full
+         flex
+         flex-row"
+  [@fadeIn]
+>
+  <div
+    class="w-4/6
+           mx-auto
+           flex
+           flex-col"
+  >
+    <app-card
+      [gradientBg]="true"
+      gridPosition="top"
+      title="Transfer by phone number"
+    >
+      <app-input-button
+        type="+1"
+        name="Phone number"
+        (click)="modalService.open()"
+      ></app-input-button>
+    </app-card>
+
+    <app-card
+      class="mt-8"
+      [gradientBg]="true"
+      gridPosition="bottop"
+      title="Transfer by account ID"
+    >
+      <app-input-button
+        type="UUID"
+        name="Account UUID"
+        (click)="modalService.open()"
+      ></app-input-button>
+    </app-card>
+  </div>
+</div>

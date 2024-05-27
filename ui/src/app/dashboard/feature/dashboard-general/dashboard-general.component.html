@@ -1,0 +1,171 @@
+<div
+  class="w-full
+         flex
+         flex-row"
+  [@fadeIn]
+>
+  <div
+    class="w-1/4
+           flex
+           flex-col"
+  >
+    <app-card
+      [gradientBg]="true"
+      gridPosition="top-left"
+      title="Balance"
+    >
+      <h1
+        class="relative
+               text-3xl
+               font-bold
+               backdrop-blur-lg"
+      >
+        <span
+          class="relative"
+          [ngClass]="{
+            'text-green-500': lastTransaction > 0,
+            'text-red-500': lastTransaction < 0
+          }"
+        >
+          {{ balance | currency }}
+        </span>
+
+        <span
+          class="absolute
+                 -z-40
+                 w-fit
+                 inset-0
+                 bg-green-500
+                 opacity-25
+                 blur-lg"
+          [ngClass]="{
+            'bg-green-500': lastTransaction > 0,
+            'bg-red-500': lastTransaction < 0
+          }"
+        >
+          {{ balance | currency }}
+        </span>
+      </h1>
+      <p
+        class="text-neutral-500
+                 text-sm
+                 -mt-1"
+      >
+        {{ lastTransaction | currency }} last transaction
+      </p>
+    </app-card>
+
+    <app-card
+      class="mt-8"
+      [gradientBg]="true"
+      gridPosition="bottom-left"
+      title="Transactions"
+    >
+      <h1
+        class="relative
+               text-3xl
+               font-bold
+               backdrop-blur-lg
+               text-neutral-900
+               dark:text-neutral-200"
+      >
+        <span
+          class="relative"
+        >
+          {{ transactionsThisMonth }}
+        </span>
+
+        <span
+          class="absolute
+                 -z-40
+                 w-fit
+                 inset-0
+                 bg-neutral-900
+                 dark:bg-neutral-200
+                 opacity-25
+                 blur-lg"
+        >
+          {{ transactionsThisMonth }}
+        </span>
+      </h1>
+      <p
+        class="text-neutral-500
+                 text-sm
+                 -mt-1"
+      >
+        {{ average | currency }} average
+      </p>
+    </app-card>
+  </div>
+
+  <div
+    class="w-3/4
+           flex
+           ml-8"
+  >
+    <app-card
+      class="w-full"
+      [gradientBg]="true"
+      gridPosition="right"
+      title="Overview"
+    >
+      <h1
+        class="text-lg
+               text-black
+               dark:text-white"
+      >
+        {{ accountFullName }}
+      </h1>
+      <p
+        class="uppercase
+               text-sm
+               text-neutral-600
+               -mt-1"
+      >
+        {{ accountType }}
+      </p>
+      
+      <h1
+        class="text-lg
+               font-bold
+               mt-5
+               text-black
+               dark:text-white"
+      >
+        Account details
+      </h1>
+      <div
+        class="text-sm
+               text-neutral-600"
+      >
+        <app-copy-text
+          [payload]="accountUuid"
+        ></app-copy-text>
+        <app-copy-text
+          [payload]="accountPhoneNumber"
+        ></app-copy-text>
+      </div>
+
+      <div
+        class="flex
+               flex-row
+               justify-between
+               w-full
+               mt-4"
+      >
+        <app-card-button
+          class="w-[48%]"
+          label="By phone number"
+          [iconUrl]="getPhoneNumberLogoSrc()"
+          (click)="changeTab('Payments');modalService.open()"
+        ></app-card-button>
+        <app-card-button
+          class="w-[48%]"
+          label="By account ID"
+          [iconUrl]="getAccountLogoSrc()"
+          (click)="changeTab('Payments');modalService.open()"
+        ></app-card-button>
+      </div>
+    </app-card>
+  </div>
+</div>

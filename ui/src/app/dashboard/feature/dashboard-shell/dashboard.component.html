@@ -1,0 +1,38 @@
+<app-tab-bar
+  [items]="tabBarItems"
+  [active]="activeTab"
+  (onTabSelect)="changeTab($event)"
+></app-tab-bar>
+
+<app-modal>
+  <app-dashboard-transfer-form>
+  </app-dashboard-transfer-form>
+</app-modal>
+
+<div
+  class="px-48
+         flex
+         flex-col
+         mt-8
+         w-full
+         mx-auto"
+>
+  @if (activeTab === 'General') {
+    <app-dashboard-wallet
+      (tabHandler)="changeTab($event)"
+      [modalService]="modalService"
+    ></app-dashboard-wallet>
+  }
+
+  @else if (activeTab === 'Operations') {
+    <app-dashboard-operations>
+    </app-dashboard-operations>
+  }
+
+  @else if (activeTab === 'Payments') {
+    <app-dashboard-payments
+      [modalService]="modalService"
+    >
+    </app-dashboard-payments>
+  }
+</div>
