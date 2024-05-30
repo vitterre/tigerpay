@@ -3,8 +3,10 @@ package com.tigerpay.auth.api;
 import com.tigerpay.auth.dto.request.AccountLoginRequestDto;
 import com.tigerpay.auth.dto.request.AccountRegisterRequestDto;
 import com.tigerpay.auth.dto.request.RefreshTokenRequestDto;
+import com.tigerpay.auth.dto.response.AccessTokenResponseDto;
 import com.tigerpay.auth.dto.response.TokenCoupleResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,10 +14,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Authorization")
 @RequestMapping("/api/v1/auth")
@@ -86,9 +86,14 @@ public interface AuthApi {
                     responseCode = "400",
                     description = "Provided refresh token is not valid",
                     content = @Content
-            )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Provided refresh token not found",
+                    content = @Content
+            ),
     })
     @PostMapping("/refresh")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    TokenCoupleResponseDto refresh(final @Valid @RequestBody RefreshTokenRequestDto refreshTokenRequestDto);
+    TokenCoupleResponseDto refresh(final @RequestBody RefreshTokenRequestDto refreshTokenRequestDto);
 }

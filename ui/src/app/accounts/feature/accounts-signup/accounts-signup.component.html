@@ -1,3 +1,9 @@
+<app-modal>
+  <app-error
+    [message]="errorMessage"
+  ></app-error>
+</app-modal>
+
 <div
   class="px-48
          flex
@@ -52,19 +58,6 @@
       >
         Firstname is required
       </p>
-      <!-- <input
-        type="text"
-        class="border
-              border-white
-              bg-black
-              focus:outline-1
-              py-2
-              px-4
-              mb-5
-              w-full"
-        placeholder="FIRSTNAME"
-        formControlName="firstName"
-      > -->
       <app-text-input
         placeHolder="FIRSTNAME"
         parentFormGroupName="firstName"
@@ -90,36 +83,10 @@
       >
         Lastname is required
       </p>
-      <!-- <input
-        type="text"
-        class="border
-              border-white
-              bg-black
-              focus:outline-1
-              py-2
-              px-4
-              mb-5
-              w-full"
-        placeholder="LASTNAME"
-        formControlName="lastName"
-      > -->
       <app-text-input
         placeHolder="LASTNAME"
         parentFormGroupName="lastName"
       ></app-text-input>
-      <!-- <input
-        type="text"
-        class="border
-              border-white
-              bg-black
-              focus:outline-1
-              py-2
-              px-4
-              mb-5
-              w-full"
-        placeholder="MIDDLENAME (OPTIONAL)"
-        formControlName="middleName"
-      > -->
       <app-text-input
         placeHolder="MIDDLENAME (OPTIONAL)"
         parentFormGroupName="middleName"
@@ -166,22 +133,55 @@
       >
         Email address is incorrect
       </p>
-      <!-- <input
-        type="text"
-        class="border
-              border-white
-              bg-black
-              focus:outline-1
-              py-2
-              px-4
-              mb-5
-              w-full"
-        placeholder="EMAIL ADDRESS"
-        formControlName="emailAddress"
-      > -->
       <app-text-input
         placeHolder="EMAIL ADDRESS"
         parentFormGroupName="emailAddress"
+      ></app-text-input>
+      <p
+        class="text-red-500
+               font-medium
+               text-xs
+               uppercase
+               absolute
+               blur-sm
+               -z-10"
+        *ngIf="phoneNumber.errors?.required && phoneNumber.touched"
+      >
+        Phone number is required
+      </p>
+      <p
+        class="text-red-500
+             font-medium
+             text-xs
+             uppercase"
+        *ngIf="phoneNumber.errors?.required && phoneNumber.touched"
+      >
+        Phone number is required
+      </p>
+      <p
+        class="text-red-500
+               font-medium
+               text-xs
+               uppercase
+               absolute
+               blur-sm
+               -z-10"
+        *ngIf="phoneNumber.errors?.pattern && phoneNumber.touched"
+      >
+        Phone number is not valid
+      </p>
+      <p
+        class="text-red-500
+             font-medium
+             text-xs
+             uppercase"
+        *ngIf="phoneNumber.errors?.pattern && phoneNumber.touched"
+      >
+        Phone number is not valid
+      </p>
+      <app-text-input
+        placeHolder="PHONE NUMBER"
+        parentFormGroupName="phoneNumber"
       ></app-text-input>
       <p
         class="text-red-500
@@ -204,19 +204,27 @@
       >
         Password is required
       </p>
-      <!-- <input
-        type="text"
-        class="border
-              border-white
-              bg-black
-              focus:outline-1
-              py-2
-              px-4
-              mb-8
-              w-full"
-        placeholder="PASSWORD"
-        formControlName="password"
-      > -->
+      <p
+        class="text-red-500
+               font-medium
+               text-xs
+               uppercase
+               absolute
+               blur-sm
+               -z-10"
+        *ngIf="password.errors?.pattern && password.touched"
+      >
+        Password is too easy
+      </p>
+      <p
+        class="text-red-500
+             font-medium
+             text-xs
+             uppercase"
+        *ngIf="password.errors?.pattern && password.touched"
+      >
+        Password is too easy
+      </p>
       <app-text-input
         placeHolder="PASSWORD"
         parentFormGroupName="password"

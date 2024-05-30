@@ -113,8 +113,25 @@
         class="text-lg
                text-black
                dark:text-white"
+        *ngIf="accountService.isLoaded | async"
       >
-        {{ accountFullName }}
+        {{
+          accountService.getState()?.lastName + ' ' +
+            accountService.getState()?.firstName + ' ' +
+            accountService.getState()?.middleName
+        }}
+      </h1>
+      <h1
+        class="text-lg
+               text-black
+               dark:text-white"
+        *ngIf="!(accountService.isLoaded | async)"
+      >
+        <span
+          class="skeleton-loading
+                 h-[20px]"
+          [style.width]="'250px'"
+          ></span>
       </h1>
       <p
         class="uppercase
@@ -139,10 +156,14 @@
                text-neutral-600"
       >
         <app-copy-text
-          [payload]="accountUuid"
+          [payload]="accountService.getState()?.uuid"
+          possibleWidth="320px"
+          [lazy]="!(accountService.isLoaded | async)"
         ></app-copy-text>
         <app-copy-text
-          [payload]="accountPhoneNumber"
+          [payload]="accountService.getState()?.phoneNumber"
+          possibleWidth="110px"
+          [lazy]="!(accountService.isLoaded | async)"
         ></app-copy-text>
       </div>
 

@@ -1,5 +1,10 @@
 package com.tigerpay.auth.service;
 
+import com.tigerpay.auth.dto.enums.Role;
+import com.tigerpay.auth.dto.enums.Subject;
+import com.tigerpay.auth.dto.response.AccountResponseDto;
+import com.tigerpay.auth.security.exception.AuthenticationHeaderException;
+import com.tigerpay.auth.security.userdetails.Account;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -14,6 +19,7 @@ import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Service
@@ -51,8 +57,27 @@ public final class JwtServiceImpl implements JwtService {
     }
 
     @Override
+    public Subject extractAuthorizationMethod(final String token) {
+        return extractClaim(token, claims -> {
+            val subject = (String) Jwts
+                    .parser()
+                    .verifyWith(getSecretKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .get("am");
+            return Subject.valueOf(subject);
+        });
+    }
+
+    @Override
     public Date extractExpiration(final String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    @Override
+    public Boolean isTokenExpired(final String token) {
+        return extractExpiration(token).before(new Date());
     }
 
     @Override
@@ -64,5 +89,12 @@ public final class JwtServiceImpl implements JwtService {
                 .expiration(Date.from(Instant.now().plusMillis(expirationAccess)))
                 .signWith(getSecretKey())
                 .compact();
+    }
+
+    @Override
+    public Boolean isTokenValid(final String accessToken, final String login, final Subject subject) {
+        val jwtLogin = extractLogin(accessToken);
+        val jwtSubject = extractAuthorizationMethod(accessToken);
+        return jwtLogin.equals(login) && jwtSubject.equals(subject) && !isTokenExpired(accessToken);
     }
 }

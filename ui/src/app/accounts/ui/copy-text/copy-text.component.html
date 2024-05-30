@@ -1,26 +1,45 @@
-<div class="flex flex-row">
-  <p
-    class="monospaced
-           cursor-pointer
-           hover:text-neutral-500
-           active:text-neutral-400
-           duration-200
-           w-fit"
-    appCopy
-    [payload]="payload"
-    (copied)="notify()"
-  >
-    {{ payload }}
-  </p>
-  <p
-    class="ml-3
-           text-neutral-700
-           uppercase
-           text-[10px]
-           font-bold"
-    *ngIf="copied"
-    [@fadeInOut]
-  >
-    Copied!
-  </p>
+<div class="flex flex-row" #skeleton>
+  @if(!lazy) {
+    <p
+      class="monospaced
+            cursor-pointer
+            hover:text-neutral-500
+            active:text-neutral-400
+            duration-200
+            w-fit"
+      appCopy
+      [payload]="payload"
+      (copied)="notify()"
+    >
+      {{ payload }}
+    </p>
+    <p
+      class="ml-3
+            text-neutral-700
+            uppercase
+            text-[10px]
+            font-bold"
+      *ngIf="copied"
+      [@fadeInOut]
+    >
+      Copied!
+    </p>
+  } @else {
+    <p
+      class="monospaced
+            hover:text-neutral-500
+            active:text-neutral-400
+            duration-200"
+      appCopy
+      [style.width]="possibleWidth"
+      [payload]="payload"
+      (copied)="notify()"
+    >
+      <span
+        class="skeleton-loading
+               w-full
+               h-[15px]"
+      ></span>
+    </p>
+  }
 </div>

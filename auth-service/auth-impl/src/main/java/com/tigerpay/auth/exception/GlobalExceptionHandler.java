@@ -3,6 +3,7 @@ package com.tigerpay.auth.exception;
 import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -31,6 +32,15 @@ public final class GlobalExceptionHandler {
         return new ExceptionMessage(
                 authenticationException.getMessage(),
                 authenticationException.getClass().getSimpleName()
+        );
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionMessage handleAccessDeniedException(final AccessDeniedException accessDeniedException) {
+        return new ExceptionMessage(
+                accessDeniedException.getMessage(),
+                accessDeniedException.getClass().getSimpleName()
         );
     }
 

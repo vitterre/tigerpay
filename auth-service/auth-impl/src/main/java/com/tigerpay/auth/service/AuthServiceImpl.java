@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -36,12 +37,15 @@ public final class AuthServiceImpl implements AuthService {
             final AccountEntity accountEntity,
             final AccountRoleEntity accountRoleEntity
     ) {
+        val data = new HashMap<String, Object>();
+        data.put("role", accountRoleEntity.getKey());
+        data.put("am", subject.name());
         return new TokenCoupleResponseDto(
                 jwtService.generateToken(
                         subject.equals(Subject.PHONE_NUMBER) ?
                                 accountEntity.getPhoneNumber() :
                                 accountEntity.getEmailAddress(),
-                        Collections.singletonMap("role", accountRoleEntity.getKey())
+                        data
                 ),
                 refreshTokenService.create(accountEntity).getToken()
         );
@@ -110,8 +114,10 @@ public final class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenCoupleResponseDto refresh(final RefreshTokenRequestDto refreshTokenRequestDto) {
+        val refreshToken = refreshTokenRequestDto.getRefreshToken();
+
         val oldRefreshTokenEntity = refreshTokenService
-                .verifyExpiration(refreshTokenService.getByToken(refreshTokenRequestDto.getRefreshToken()));
+                .verifyExpiration(refreshTokenService.getByToken(refreshToken));
 
         val accountEntity = accountRepository
                 .findByUuid(oldRefreshTokenEntity.getAccountUuid())
@@ -123,14 +129,45 @@ public final class AuthServiceImpl implements AuthService {
                 .findByUuid(accountEntity.getRoleUuid())
                 .orElseThrow(() -> new RoleNotFoundServiceException(accountEntity.getRoleUuid()));
 
-        refreshTokenService.delete(refreshTokenRequestDto.getRefreshToken());
+        refreshTokenService.delete(refreshToken);
+
+        val data = new HashMap<String, Object>();
+        data.put("role", roleEntity.getKey());
+        data.put("am", Subject.PHONE_NUMBER);
 
         return new TokenCoupleResponseDto(
                 jwtService.generateToken(
                         accountEntity.getPhoneNumber(),
-                        Collections.singletonMap("role", roleEntity.getLabel())
+                        data
                 ),
                 refreshTokenService.create(accountEntity).getToken()
         );
+
     }
+
+    //    @Override
+    //    public TokenCoupleResponseDto refresh(final RefreshTokenRequestDto refreshTokenRequestDto) {
+    //        val oldRefreshTokenEntity = refreshTokenService
+    //                .verifyExpiration(refreshTokenService.getByToken(refreshTokenRequestDto.getRefreshToken()));
+    //
+    //        val accountEntity = accountRepository
+    //                .findByUuid(oldRefreshTokenEntity.getAccountUuid())
+    //                .orElseThrow(() ->
+    //                        new AccountNotFoundServiceException(oldRefreshTokenEntity.getAccountUuid())
+    //                );
+    //
+    //        val roleEntity = roleRepository
+    //                .findByUuid(accountEntity.getRoleUuid())
+    //                .orElseThrow(() -> new RoleNotFoundServiceException(accountEntity.getRoleUuid()));
+    //
+    //        refreshTokenService.delete(refreshTokenRequestDto.getRefreshToken());
+    //
+    //        return new TokenCoupleResponseDto(
+    //                jwtService.generateToken(
+    //                        accountEntity.getPhoneNumber(),
+    //                        Collections.singletonMap("role", roleEntity.getLabel())
+    //                ),
+    //                refreshTokenService.create(accountEntity).getToken()
+    //        );
+    //    }
 }

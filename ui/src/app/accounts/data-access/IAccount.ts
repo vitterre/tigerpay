@@ -1,8 +1,9 @@
-export interface ISignUp {
+export interface IAccount {
+  uuid: string,
   firstName: string,
   lastName: string,
   middleName?: string,
   emailAddress: string,
   phoneNumber: string,
-  password: string
+  role: string
 }

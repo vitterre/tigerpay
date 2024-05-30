@@ -44,6 +44,10 @@ public final class AccountRegisterRequestDto {
     )
     private String phoneNumber;
 
-    @NotBlank(message = "Password must not be balnk")
+    @NotBlank(message = "Password must not be blank")
+    @Pattern(
+            regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&()^])[A-Za-z\\d@$!%*#?&()^]{8,}$",
+            message = "Password must have minimum eight characters, at least one letter, one number and one special character such as '@$!%*#?&()^'"
+    )
     private String password;
 }

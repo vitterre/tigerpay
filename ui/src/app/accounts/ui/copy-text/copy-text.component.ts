@@ -22,7 +22,14 @@ import { CopyDirective } from '../../util/copy.directive'
   ],
 })
 export class CopyTextComponent {
-  @Input() payload: string = ''
+  @Input()
+  public payload: string = ''
+
+  @Input()
+  public lazy: boolean | null = false
+
+  @Input()
+  public possibleWidth: string = '100px'
   public copied: boolean = false
 
   public notify() {

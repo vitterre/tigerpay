@@ -1,3 +1,9 @@
+<app-modal>
+  <app-error
+    [message]="errorMessage"
+  ></app-error>
+</app-modal>
+
 <div
   class="px-48
          flex
@@ -30,7 +36,7 @@
       [formGroup]="form"
       (ngSubmit)="submit()"
     >
-      <p
+      <!-- <p
         class="text-red-500
                font-medium
                text-xs
@@ -50,7 +56,7 @@
         *ngIf="emailAddress.errors?.required && emailAddress.touched"
       >
         Email address is required
-      </p>
+      </p> -->
       <p
         class="text-red-500
                font-medium
@@ -75,6 +81,19 @@
       <app-text-input
         placeHolder="EMAIL ADDRESS"
         parentFormGroupName="emailAddress"
+      ></app-text-input>
+
+      <p
+        class="mx-auto
+               w-fit
+               flex
+               mb-4
+               text-neutral-600"
+      >or</p>
+
+      <app-text-input
+        placeHolder="PHONE NUMBER"
+        parentFormGroupName="phoneNumber"
       ></app-text-input>
       <p
         class="text-red-500
@@ -105,7 +124,7 @@
       ></app-text-input>
       
       <app-button
-        [disabledCondition]="form.invalid"
+        [disabledCondition]="form.invalid || (this.form.value.emailAddress === '' && this.form.value.phoneNumber === '')"
         label="Submit"
         type="submit"
       ></app-button>
