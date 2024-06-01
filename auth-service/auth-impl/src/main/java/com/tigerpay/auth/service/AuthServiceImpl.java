@@ -14,13 +14,15 @@ import com.tigerpay.auth.model.jooq.schema.tables.pojos.AccountRoleEntity;
 import com.tigerpay.auth.repository.AccountRepository;
 import com.tigerpay.auth.repository.RoleRepository;
 import com.tigerpay.auth.security.exception.AuthenticationHeaderException;
+import com.tigerpay.auth.event.AccountCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ public final class AuthServiceImpl implements AuthService {
     private final RefreshTokenService refreshTokenService;
     private final JwtService jwtService;
     private final RoleRepository roleRepository;
+    private final KafkaTemplate<UUID, AccountCreatedEvent> kafkaAccountCreatedEventTemplate;
 
     private TokenCoupleResponseDto authenticate(
             final Subject subject,
@@ -38,6 +41,7 @@ public final class AuthServiceImpl implements AuthService {
             final AccountRoleEntity accountRoleEntity
     ) {
         val data = new HashMap<String, Object>();
+        data.put("uuid", accountEntity.getUuid());
         data.put("role", accountRoleEntity.getKey());
         data.put("am", subject.name());
         return new TokenCoupleResponseDto(
@@ -87,6 +91,16 @@ public final class AuthServiceImpl implements AuthService {
         account.setRoleUuid(role.getUuid());
 
         val savedAccount = accountRepository.save(account);
+
+        kafkaAccountCreatedEventTemplate.send(
+                "accounts-created",
+                savedAccount.getUuid(),
+                new AccountCreatedEvent(
+                        savedAccount.getUuid(),
+                        savedAccount.getPhoneNumber()
+                )
+        );
+
         return authenticate(Subject.PHONE_NUMBER, savedAccount, role);
     }
 
@@ -132,6 +146,8 @@ public final class AuthServiceImpl implements AuthService {
         refreshTokenService.delete(refreshToken);
 
         val data = new HashMap<String, Object>();
+
+        data.put("uuid", accountEntity.getUuid());
         data.put("role", roleEntity.getKey());
         data.put("am", Subject.PHONE_NUMBER);
 
@@ -144,30 +160,4 @@ public final class AuthServiceImpl implements AuthService {
         );
 
     }
-
-    //    @Override
-    //    public TokenCoupleResponseDto refresh(final RefreshTokenRequestDto refreshTokenRequestDto) {
-    //        val oldRefreshTokenEntity = refreshTokenService
-    //                .verifyExpiration(refreshTokenService.getByToken(refreshTokenRequestDto.getRefreshToken()));
-    //
-    //        val accountEntity = accountRepository
-    //                .findByUuid(oldRefreshTokenEntity.getAccountUuid())
-    //                .orElseThrow(() ->
-    //                        new AccountNotFoundServiceException(oldRefreshTokenEntity.getAccountUuid())
-    //                );
-    //
-    //        val roleEntity = roleRepository
-    //                .findByUuid(accountEntity.getRoleUuid())
-    //                .orElseThrow(() -> new RoleNotFoundServiceException(accountEntity.getRoleUuid()));
-    //
-    //        refreshTokenService.delete(refreshTokenRequestDto.getRefreshToken());
-    //
-    //        return new TokenCoupleResponseDto(
-    //                jwtService.generateToken(
-    //                        accountEntity.getPhoneNumber(),
-    //                        Collections.singletonMap("role", roleEntity.getLabel())
-    //                ),
-    //                refreshTokenService.create(accountEntity).getToken()
-    //        );
-    //    }
 }

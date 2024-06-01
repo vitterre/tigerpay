@@ -13,7 +13,10 @@ public class PropertiesConfig {
     @Bean
     public YamlPropertiesFactoryBean yamlPropertiesFactoryBean() {
         val yamlPropertiesFactoryBean = new YamlPropertiesFactoryBean();
-        yamlPropertiesFactoryBean.setResources(new ClassPathResource("application.yaml"));
+        yamlPropertiesFactoryBean.setResources(
+                new ClassPathResource("application.yaml"),
+                new ClassPathResource("kafka.yaml")
+        );
         return yamlPropertiesFactoryBean;
     }
 

@@ -23,11 +23,9 @@ import java.util.Objects;
 @Slf4j
 public class TokenAuthenticationFilter extends RequestHeaderAuthenticationFilter {
 
-    private final AccountService accountService;
     private final JwtService jwtService;
 
-    public TokenAuthenticationFilter(final AccountService accountService, final JwtService jwtService, final AuthenticationManager authenticationManager) {
-        this.accountService = accountService;
+    public TokenAuthenticationFilter(final JwtService jwtService, final AuthenticationManager authenticationManager) {
         this.jwtService = jwtService;
         this.setAuthenticationManager(authenticationManager);
     }
@@ -39,9 +37,7 @@ public class TokenAuthenticationFilter extends RequestHeaderAuthenticationFilter
             val token = HttpSettingUtil.getTokenFromValidatedAuthorizationHeader(((HttpServletRequest) request).getHeader("Authorization"));
 
             if (Objects.nonNull(token)) {
-                val login = jwtService.extractLogin(token);
-                val subject = jwtService.extractAuthorizationMethod(token);
-                val account = accountService.getByLogin(subject, login);
+                val account = jwtService.extractAccount(token);
 
                 val authenticationToken = new PreAuthenticatedAuthenticationToken(account, token, account.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(

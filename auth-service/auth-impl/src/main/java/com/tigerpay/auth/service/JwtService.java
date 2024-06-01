@@ -6,10 +6,12 @@ import com.tigerpay.auth.security.userdetails.Account;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 public interface JwtService {
 
     String extractLogin(final String token);
+    Account extractAccount(final String token);
     Subject extractAuthorizationMethod(final String token);
     Date extractExpiration(final String token);
     Boolean isTokenExpired(final String token);

@@ -14,6 +14,7 @@ public class AccountController implements AccountApi {
     private final AccountService accountService;
 
     @PreAuthorize("hasAuthority('USER')")
+    @Override
     public AccountResponseDto getCurrentUserAccount() {
         return accountService.getCurrentUserAccount();
     }

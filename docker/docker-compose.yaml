@@ -1,13 +1,144 @@
 version: '3.9'
 
+x-zookeeper-common: &zookeeper-common
+  image: 'confluentinc/cp-zookeeper:latest'
+  platform: 'linux/arm64'
+  container_name: 'zookeeper'
+  hostname: 'zookeeper'
+  networks:
+    - confluent
+  restart: always
+  healthcheck:
+    test: echo srvr | nc -z zookeeper 9000 || exit 1
+    interval: 10s
+    retries: 5
+
+x-kafka-common: &kafka-common
+  image: 'confluentinc/cp-kafka:latest'
+  platform: 'linux/arm64'
+  depends_on:
+    zookeeper:
+      condition: service_healthy
+  networks:
+    - confluent
+
 services:
   tigerpay-auth-db:
     image: 'postgres:latest'
     container_name: 'tigerpay-auth-db'
     hostname: 'tigerpay-auth-db'
+    networks:
+      - confluent
     environment:
       POSTGRES_DB: 'tigerpay_auth_db'
       POSTGRES_USER: 'tigerpay_dev'
       POSTGRES_PASSWORD: 'tigerpay_dev'
     ports:
       - '5432:5432'
+  zookeeper:
+    <<: *zookeeper-common
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 9000
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 9000:9000
+
+  tigerpay-payment-db:
+    image: 'postgres:latest'
+    container_name: 'tigerpay-payment-db'
+    hostname: 'tigerpay-payment-db'
+    networks:
+      - confluent
+    environment:
+      POSTGRES_DB: 'tigerpay_payment_db'
+      POSTGRES_USER: 'tigerpay_dev'
+      POSTGRES_PASSWORD: 'tigerpay_dev'
+    ports:
+      - '5433:5432'
+
+  kafka1:
+    <<: *kafka-common
+    container_name: kafka1
+    hostname: kafka1
+    restart: always
+    healthcheck:
+      test: echo 'ruok' | nc -z kafka1 9001 || exit 1
+      interval: 10s
+      retries: 25
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:9000
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9001,PLAINTEXT_HOST://localhost:29001
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+    ports:
+      - 9001:9001
+      - 29001:29001
+  kafka2:
+    <<: *kafka-common
+    container_name: kafka2
+    hostname: kafka2
+    restart: always
+    healthcheck:
+      test: echo 'ruok' | nc -z kafka2 9002 || exit 1
+      interval: 10s
+      retries: 25
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:9000
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9002,PLAINTEXT_HOST://localhost:29002
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+    ports:
+      - 9002:9002
+      - 29002:29002
+
+  kafka3:
+    <<: *kafka-common
+    container_name: kafka3
+    hostname: kafka3
+    restart: always
+    healthcheck:
+      test: echo 'ruok' | nc -z kafka3 9003 || exit 1
+      interval: 10s
+      retries: 25
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:9000
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9003,PLAINTEXT_HOST://localhost:29003
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+    ports:
+      - 9003:9003
+      - 29003:29003
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    hostname: kafka-ui
+    networks:
+      - confluent
+    depends_on:
+      kafka1:
+        condition: service_healthy
+      kafka2:
+        condition: service_healthy
+      kafka3:
+        condition: service_healthy
+    environment:
+      KAFKA_CLUSTERS_0_NAME: tigerpay-kafka-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9001,kafka2:9002,kafka3:9003
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:9000
+    ports:
+      - 8088:8080
+
+
+networks:
+  confluent:
+    driver: bridge

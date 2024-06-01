@@ -43,7 +43,6 @@ public class SecurityConfig {
     };
 
     private final TokenAuthenticationUserDetailsService authenticationUserDetailsService;
-    private final AccountService accountService;
     private final JwtService jwtService;
 
     @Bean
@@ -91,7 +90,7 @@ public class SecurityConfig {
     }
 
     private RequestHeaderAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(accountService, jwtService, authenticationManager());
+        return new TokenAuthenticationFilter(jwtService, authenticationManager());
     }
 
     private AuthenticationManager authenticationManager() {

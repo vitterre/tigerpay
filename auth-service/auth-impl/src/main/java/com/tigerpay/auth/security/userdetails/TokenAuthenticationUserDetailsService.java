@@ -17,25 +17,4 @@ public class TokenAuthenticationUserDetailsService
     public UserDetails loadUserDetails(final PreAuthenticatedAuthenticationToken token) throws UsernameNotFoundException {
         return (Account) token.getPrincipal();
     }
-
-    //    private UserDetails loadUserDetails(final AccountResponseDto accountResponseDto, final String accessToken) {
-    //        log.debug("Loading user details from {}", accountResponseDto);
-    //
-    //        try {
-    //            return Optional.ofNullable(accountResponseDto)
-    //                    .map(account ->
-    //                            Account.builder()
-    //                                    .uuid(account.uuid())
-    //                                    .subject(Subject.PHONE_NUMBER)
-    //                                    .username(accountResponseDto.phoneNumber())
-    //                                    .role(accountResponseDto.role())
-    //                                    .accessToken(accessToken)
-    //                                    .build()
-    //                    ).orElseThrow(() ->
-    //                            new AuthenticationHeaderException("Unknown user account by token %s".formatted(accessToken))
-    //                    );
-    //        } catch (Exception e) {
-    //            throw new AuthenticationHeaderException(e.getMessage());
-    //        }
-    //    }
 }

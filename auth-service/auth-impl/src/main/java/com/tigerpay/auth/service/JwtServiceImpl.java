@@ -57,6 +57,24 @@ public final class JwtServiceImpl implements JwtService {
     }
 
     @Override
+    public Account extractAccount(final String token) {
+        val claims = extractAllClaims(token);
+
+        if (isTokenExpired(token)) {
+            throw new AuthenticationHeaderException("Token has expired");
+        }
+
+        return Account.builder()
+                .uuid(UUID.fromString(claims.get("uuid", String.class)))
+                .username(extractLogin(token))
+                .subject(Subject.valueOf(claims.get("am", String.class)))
+                .role(Role.valueOf(claims.get("role", String.class)))
+                .accessToken(token)
+                .password("******")
+                .build();
+    }
+
+    @Override
     public Subject extractAuthorizationMethod(final String token) {
         return extractClaim(token, claims -> {
             val subject = (String) Jwts

@@ -1,0 +1,4 @@
+kafka:
+  bootstrap-servers: localhost:29001,localhost:29002,localhost:29003
+  producer:
+    client-id: accounts-created-events-producer
