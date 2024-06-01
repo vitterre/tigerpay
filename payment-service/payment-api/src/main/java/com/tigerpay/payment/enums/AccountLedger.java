@@ -8,9 +8,8 @@ import lombok.val;
 @RequiredArgsConstructor
 public enum AccountLedger {
 
-    RUB(100),
-    USD(200),
-    EUR(300);
+    USD(100),
+    EUR(200);
 
     private final Integer ledger;
 

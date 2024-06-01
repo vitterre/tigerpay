@@ -1,13 +1,14 @@
 import { animate, style, transition, trigger } from '@angular/animations'
-import { CommonModule } from '@angular/common'
+import { CommonModule, CurrencyPipe } from '@angular/common'
 import { HttpClient } from '@angular/common/http'
-import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core'
-import { IAccount } from '../../../accounts/data-access/IAccount'
+import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { AccountService } from '../../../accounts/data-access/account.service'
+import { PaymentService } from '../../../accounts/data-access/payment.service'
 import { CopyTextComponent } from '../../../accounts/ui/copy-text/copy-text.component'
 import { CardButtonComponent } from '../../../shared/card-button/card-button.component'
 import { CardComponent } from '../../../shared/card/card.component'
-import { ModalService } from '../../../shared/modal/modal.service'
+import { DropdownComponent } from '../../../shared/dropdown/dropdown.component'
+import { IDropdownElement } from '../../../shared/dropdown/IDropdownElement'
 
 @Component({
   selector: 'app-dashboard-wallet',
@@ -16,7 +17,11 @@ import { ModalService } from '../../../shared/modal/modal.service'
     CommonModule,
     CardComponent,
     CopyTextComponent,
-    CardButtonComponent
+    CardButtonComponent,
+    DropdownComponent
+  ],
+  providers: [
+    CurrencyPipe
   ],
   templateUrl: './dashboard-general.component.html',
   animations: [
@@ -28,7 +33,7 @@ import { ModalService } from '../../../shared/modal/modal.service'
     ]),
   ]
 })
-export class DashboardWalletComponent implements AfterViewInit {
+export class DashboardWalletComponent {
 
   public readonly balance: number = 2000
   public readonly lastTransaction: number = 123
@@ -39,46 +44,42 @@ export class DashboardWalletComponent implements AfterViewInit {
   public readonly accountUuid: string = 'lsdfjslkfjlskkjf'
   public readonly accountPhoneNumber: string = '+123456789'
 
-  // TODO: -- fix this piece of shit
   @Input()
-  public modalService: ModalService
+  public accountItems: Array<IDropdownElement> = []
+  
+  @Input()
+  public paymentService: PaymentService
 
   @Output()
   public tabHandler: EventEmitter<string> = new EventEmitter<string>()
 
   constructor(
     public accountService: AccountService,
-    public httpClient: HttpClient
+    public httpClient: HttpClient,
+    private currencyPipe: CurrencyPipe
   ) { }
 
-  public ngAfterViewInit(): void {
-    this.httpClient
-      .get<IAccount>('http://localhost:8000/api/v1/accounts/me')
-      .subscribe((response: IAccount) => {
-        setTimeout(() => {
-          this.accountService.updateState(response)
-          console.log(this.accountService.getState().firstName)
-        }, 900)
-      })
+  public onSelectItem(index: number) {
+    this.paymentService.switchCurrentAccountState(index)
   }
 
   public changeTab(tab: string): void {
     this.tabHandler.emit(tab)
   }
 
-  public getPhoneNumberLogoSrc() {
+  public getDepositIconSrc() {
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return '../assets/icons/phone-fill-dark.svg'
+      return '../assets/icons/deposit-light.svg'
     } else {
-      return '../assets/icons/phone-fill.svg'
+      return '../assets/icons/deposit-dark.svg'
     }
   }
 
-  public getAccountLogoSrc() {
+  public getWithdrawalIconSrc() {
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return '../assets/icons/user-shared-2-line-dark.svg'
+      return '../assets/icons/withdrawal-light.svg'
     } else {
-      return '../assets/icons/user-shared-2-line.svg'
+      return '../assets/icons/withdrawal-dark.svg'
     }
   }
 }

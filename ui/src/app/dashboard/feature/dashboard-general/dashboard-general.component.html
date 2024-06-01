@@ -20,39 +20,60 @@
                font-bold
                backdrop-blur-lg"
       >
-        <span
-          class="relative"
-          [ngClass]="{
-            'text-green-500': lastTransaction > 0,
-            'text-red-500': lastTransaction < 0
-          }"
-        >
-          {{ balance | currency }}
-        </span>
-
-        <span
-          class="absolute
-                 -z-40
-                 w-fit
-                 inset-0
-                 bg-green-500
-                 opacity-25
-                 blur-lg"
-          [ngClass]="{
-            'bg-green-500': lastTransaction > 0,
-            'bg-red-500': lastTransaction < 0
-          }"
-        >
-          {{ balance | currency }}
-        </span>
+        @if (paymentService.areAccountsLoaded | async) {
+          <span
+            class="relative fadeInAnimation"
+            [ngClass]="{
+              'text-green-500': lastTransaction > 0,
+              'text-red-500': lastTransaction < 0
+            }"
+          >
+            {{ paymentService.getCurrentAccountState()?.balance | currency:paymentService.getCurrentAccountState()?.ledger }}
+          </span>
+  
+          <span
+            class="absolute
+                   -z-40
+                   w-fit
+                   inset-0
+                   bg-green-500
+                   opacity-25
+                   blur-lg"
+            [ngClass]="{
+              'bg-green-500': lastTransaction > 0,
+              'bg-red-500': lastTransaction < 0
+            }"
+          >
+            {{ paymentService.getCurrentAccountState()?.balance | currency:paymentService.getCurrentAccountState()?.ledger }}
+          </span>
+        } @else {
+          <span
+          class="skeleton-loading
+                 h-[29px]"
+          [style.width]="'120px'"
+          ></span>
+        }
       </h1>
-      <p
-        class="text-neutral-500
-                 text-sm
+      @if (paymentService.areAccountsLoaded | async) {
+        <p
+          class="text-neutral-500
+                   text-sm
+                   -mt-1"
+        >
+          @if (paymentService.getTransfersState()?.length > 0) {
+            {{ paymentService.getTransfersState()[0].amount | currency:paymentService.getCurrentAccountState()?.ledger }} last transaction
+          } @else {
+            No transfers
+          }
+        </p>
+      } @else {
+        <span
+          class="skeleton-loading
+                 h-[15px]
                  -mt-1"
-      >
-        {{ lastTransaction | currency }} last transaction
-      </p>
+          [style.width]="'40%'"
+        ></span>
+      }
     </app-card>
 
     <app-card
@@ -69,32 +90,49 @@
                text-neutral-900
                dark:text-neutral-200"
       >
-        <span
-          class="relative"
-        >
-          {{ transactionsThisMonth }}
-        </span>
-
-        <span
-          class="absolute
-                 -z-40
-                 w-fit
-                 inset-0
-                 bg-neutral-900
-                 dark:bg-neutral-200
-                 opacity-25
-                 blur-lg"
-        >
-          {{ transactionsThisMonth }}
-        </span>
+        @if (paymentService.areAccountsLoaded | async) {
+          <span
+            class="relative"
+          >
+            {{ paymentService.getTransfersState()?.length }}
+          </span>
+  
+          <span
+            class="absolute
+                   -z-40
+                   w-fit
+                   inset-0
+                   bg-neutral-900
+                   dark:bg-neutral-200
+                   opacity-25
+                   blur-lg"
+          >
+            {{ paymentService.getTransfersState()?.length }}
+          </span>
+        } @else {
+          <span
+            class="skeleton-loading
+                   h-[29px]"
+            [style.width]="'120px'"
+          ></span>
+        }
       </h1>
-      <p
-        class="text-neutral-500
-                 text-sm
-                 -mt-1"
-      >
-        {{ average | currency }} average
-      </p>
+      @if (paymentService.areAccountsLoaded | async) {
+        <p
+          class="text-neutral-500
+                   text-sm
+                   -mt-1"
+        >
+          At this month
+        </p>
+      } @else {
+        <span
+        class="skeleton-loading
+               h-[15px]
+               -mt-1"
+        [style.width]="'40%'"
+      ></span>
+      }
     </app-card>
   </div>
 
@@ -133,14 +171,21 @@
           [style.width]="'250px'"
           ></span>
       </h1>
-      <p
-        class="uppercase
-               text-sm
-               text-neutral-600
-               -mt-1"
-      >
-        {{ accountType }}
-      </p>
+
+      @if (paymentService.areAccountsLoaded | async) {
+        <app-dropdown
+          selectLabel="Select account"
+          [items]="accountItems"
+          [selectedIndex]="paymentService.getCurrentAccountIndexState() ?? 0"
+          (onSelect)="onSelectItem($event)"
+        ></app-dropdown>
+      } @else {
+        <span
+          class="skeleton-loading
+                 h-[40px]"
+          [style.width]="'160px'"
+          ></span>
+      }
       
       <h1
         class="text-lg
@@ -156,8 +201,8 @@
                text-neutral-600"
       >
         <app-copy-text
-          [payload]="accountService.getState()?.uuid"
-          possibleWidth="320px"
+          [payload]="paymentService.getCurrentAccountState()?.id"
+          possibleWidth="170px"
           [lazy]="!(accountService.isLoaded | async)"
         ></app-copy-text>
         <app-copy-text
@@ -176,15 +221,15 @@
       >
         <app-card-button
           class="w-[48%]"
-          label="By phone number"
-          [iconUrl]="getPhoneNumberLogoSrc()"
-          (click)="changeTab('Payments');modalService.open()"
+          label="Deposit"
+          [iconUrl]="getDepositIconSrc()"
+          (click)="''"
         ></app-card-button>
         <app-card-button
           class="w-[48%]"
-          label="By account ID"
-          [iconUrl]="getAccountLogoSrc()"
-          (click)="changeTab('Payments');modalService.open()"
+          label="Withdrawal"
+          [iconUrl]="getWithdrawalIconSrc()"
+          (click)="''"
         ></app-card-button>
       </div>
     </app-card>

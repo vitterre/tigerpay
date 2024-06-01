@@ -35,7 +35,7 @@ public interface PaymentAccountApi {
                     content = @Content()
             )
     })
-    @GetMapping("/me")
+    @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     List<PaymentAccountResponseDto> getCurrentUserPaymentAccounts();
 }

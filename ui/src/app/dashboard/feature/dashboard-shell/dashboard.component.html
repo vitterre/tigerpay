@@ -19,8 +19,9 @@
 >
   @if (activeTab === 'General') {
     <app-dashboard-wallet
+      [accountItems]="accountItems"
       (tabHandler)="changeTab($event)"
-      [modalService]="modalService"
+      [paymentService]="paymentService"
     ></app-dashboard-wallet>
   }
 
