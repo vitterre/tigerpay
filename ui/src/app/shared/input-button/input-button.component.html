@@ -1,0 +1,49 @@
+<button
+  class="dark:border-[#222]
+          border
+          w-full
+          rounded-2xl
+          px-2
+          py-2
+          shadow-lg
+          dark:bg-neutral-900
+          hover:dark:bg-neutral-800
+          hover:dark:border-[#333]
+          active:dark:bg-neutral-900
+          active:duration-150
+          duration-300"
+  placeholder="PHONE NUMBER"
+>
+  <div
+    class="flex
+            flex-row
+            rounded-xl
+            gap-4"
+  >
+    <div
+      class="px-2
+              w-20
+              flex
+              justify-center
+              rounded-lg
+              bg-neutral-200
+              dark:bg-neutral-800"
+    >
+      <h1
+        class="mt-[4px]
+                text-sm
+                text-neutral-400
+                dark:text-neutral-500"
+      >
+        {{ type }}
+      </h1>
+    </div>
+    <h1
+      class="mt-[2px]
+             text-neutral-600
+            dark:text-neutral-400"
+    >
+      {{ name }}
+    </h1>
+  </div>
+</button>

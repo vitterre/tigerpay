@@ -1,0 +1,77 @@
+<div
+  class="w-full
+         border
+         cursor-pointer
+         text-neutral-800
+         dark:text-neutral-300
+         dark:border-white
+         dark:bg-black
+         bg-white
+         border-black
+         focus:outline-1
+         py-2
+         mb-4
+         px-4"
+>
+  <div
+    class="flex
+           justify-between
+           w-full
+           items-center"
+    (click)= "isOpen = !isOpen"
+  >
+    <div
+      class="flex gap-1"
+    >
+      @if (selectedItem.sign) {
+        <h1
+          class="font-bold
+                 text-neutral-800
+                 dark:text-neutral-400
+                 w-4"
+        >
+          {{ selectedItem.sign }}
+        </h1>
+      }
+      <h1>{{ selectedItem.label }}</h1>
+    </div>
+
+    @if (selectedItem.value !== '' ) {
+      <p
+        class="text-sm
+               text-neutral-500"
+      >
+      {{ selectedItem.value }}
+      </p>
+    }
+  </div>
+
+  @if (isOpen) {
+    <div
+      style="width: inherit;"
+      @fadeInOut
+    >
+      @for (item of items; track $index) {
+        <div
+          class="mt-1"
+          (click)="selectItem($index)"
+        >
+          <h1
+            [ngClass]="{
+              'ml-5': selectedItem.sign
+            }"
+          >
+            {{ item.label }}
+          </h1>
+          <p
+            class="text-sm
+                   ml-5
+                   text-neutral-500"
+          >
+            {{ item.value }}
+          </p>
+        </div>
+      }
+    </div>
+  }
+</div>

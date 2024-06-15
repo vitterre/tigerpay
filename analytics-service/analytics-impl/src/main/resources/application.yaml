@@ -1,0 +1,12 @@
+http:
+  port: 7300
+  gracefulShutdownTimeout: 20
+clickhouse:
+  host: "localhost"
+  port: 8123
+  user: "tigerpay_dev"
+  password: "tigerpay_dev"
+  database: "clickhouse_transfers_data_mart"
+  url: "jdbc:clickhouse://localhost:8123/clickhouse_transfers_data_mart"
+security:
+  secret: 7d29c3d95edabcbe07f4167962fefc60849497fcdae1a9d50540170b5cb3d9a0fe2efc6a5b1d1da4203265e87afa57003003e51f28ed0fb2730970385b1b54e1

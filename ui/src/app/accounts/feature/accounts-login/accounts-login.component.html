@@ -1,0 +1,133 @@
+<app-modal>
+  <app-error
+    [message]="errorMessage"
+  ></app-error>
+</app-modal>
+
+<div
+  class="px-48
+         flex
+         flex-col
+         items-center
+         mt-20
+         justify-center"
+>
+  <div
+    class="w-96
+           border
+           border-dashed
+           pt-8
+           pb-12
+           px-8
+           border-neutral-700"
+  >
+    <h1
+      class="mx-auto
+            text-2xl
+            text-black
+            dark:text-white
+            uppercase
+            font-bold
+            mb-2"
+    >Log In</h1>
+    <form
+      class="justify-between
+             mx-auto"
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+    >
+      <!-- <p
+        class="text-red-500
+               font-medium
+               text-xs
+               uppercase
+               absolute
+               blur-sm
+               -z-10"
+        *ngIf="emailAddress.errors?.required && emailAddress.touched"
+      >
+        Email address is required
+      </p>
+      <p
+        class="text-red-500
+             font-medium
+             text-xs
+             uppercase"
+        *ngIf="emailAddress.errors?.required && emailAddress.touched"
+      >
+        Email address is required
+      </p> -->
+      <p
+        class="text-red-500
+               font-medium
+               text-xs
+               uppercase
+               absolute
+               blur-sm
+               -z-10"
+        *ngIf="emailAddress.errors?.email && emailAddress.touched"
+      >
+        Email address is incorrect
+      </p>
+      <p
+        class="text-red-500
+             font-medium
+             text-xs
+             uppercase"
+        *ngIf="emailAddress.errors?.email && emailAddress.touched"
+      >
+        Email address is incorrect
+      </p>
+      <app-text-input
+        placeHolder="EMAIL ADDRESS"
+        parentFormGroupName="emailAddress"
+      ></app-text-input>
+
+      <p
+        class="mx-auto
+               w-fit
+               flex
+               mb-4
+               text-neutral-600"
+      >or</p>
+
+      <app-text-input
+        placeHolder="PHONE NUMBER"
+        parentFormGroupName="phoneNumber"
+      ></app-text-input>
+      <p
+        class="text-red-500
+               font-medium
+               text-xs
+               uppercase
+               absolute
+               blur-sm
+               -z-10"
+        *ngIf="password.errors?.required && password.touched"
+      >
+        Password is required
+      </p>
+      <p
+        class="text-red-500
+             font-medium
+             text-xs
+             uppercase"
+        *ngIf="password.errors?.required && password.touched"
+      >
+        Password is required
+      </p>
+      
+      <app-text-input
+        class="mb-8"
+        placeHolder="PASSWORD"
+        parentFormGroupName="password"
+      ></app-text-input>
+      
+      <app-button
+        [disabledCondition]="form.invalid || (this.form.value.emailAddress === '' && this.form.value.phoneNumber === '')"
+        label="Submit"
+        type="submit"
+      ></app-button>
+    </form>
+  </div>
+</div>

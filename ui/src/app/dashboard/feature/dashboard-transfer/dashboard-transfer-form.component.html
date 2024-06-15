@@ -1,0 +1,66 @@
+<form
+  class="flex
+         flex-col
+         "
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+>
+  <h1
+    class="mx-auto
+           text-2xl
+           uppercase
+           font-bold
+           text-black
+           dark:text-white
+           mb-2"
+  >Transfer money</h1>
+  
+  <!-- <app-text-input
+    placeHolder="PHONE NUMBER"
+    parentFormGroupName="phoneNumber"
+  ></app-text-input>
+  
+  <p
+    class="mx-auto
+           mb-4
+           text-neutral-600"
+  >or</p> -->
+
+  <app-text-input
+    placeHolder="ACCOUNT ID"
+    parentFormGroupName="accountUuid"
+  ></app-text-input>
+
+  <app-text-input
+    placeHolder="AMOUNT"
+    parentFormGroupName="amount"
+  ></app-text-input>
+
+  <app-input-dropdown
+    selectLabel="Account"
+    [items]="map(accountItems)"
+    [selectedIndex]="paymentService.getCurrentAccountIndexState() ?? 0"
+    (onSelect)="onSelectAccount($event)"
+    [showLabel]="true"
+  ></app-input-dropdown>
+  
+  <app-input-dropdown
+    selectLabel="Category"
+    [items]="mapCategories(categories)"
+    [selectedIndex]="selectedCategoryIndex"
+    (onSelect)="onSelectCategory($event)"
+    [showLabel]="true"
+  ></app-input-dropdown>
+
+  <!-- <app-checkbox
+    label="Create bill"
+    parentFormGroupName="sendBill"
+  ></app-checkbox> -->
+  <app-button
+    class="mt-4"
+    type="submit"
+    [disabledCondition]="this.form.invalid || (this.form.value.phoneNumber === '' && !this.form.value.accountUuid)"
+    label="Transfer"
+  >
+  </app-button>
+</form>

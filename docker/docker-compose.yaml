@@ -1,0 +1,206 @@
+version: '3.9'
+
+x-zookeeper-common: &zookeeper-common
+  image: 'confluentinc/cp-zookeeper:latest'
+  platform: 'linux/arm64'
+  container_name: 'zookeeper'
+  hostname: 'zookeeper'
+  networks:
+    - tigerpay-dev-network
+  restart: always
+  healthcheck:
+    test: echo srvr | nc -z zookeeper 9000 || exit 1
+    interval: 10s
+    retries: 5
+
+x-kafka-common: &kafka-common
+  image: 'confluentinc/cp-kafka:latest'
+  platform: 'linux/arm64'
+  depends_on:
+    zookeeper:
+      condition: service_healthy
+  networks:
+    - tigerpay-dev-network
+
+services:
+  tigerpay-auth-db:
+    image: 'postgres:latest'
+    container_name: 'tigerpay-auth-db'
+    hostname: 'tigerpay-auth-db'
+    networks:
+      - tigerpay-dev-network
+    environment:
+      POSTGRES_DB: 'tigerpay_auth_db'
+      POSTGRES_USER: 'tigerpay_dev'
+      POSTGRES_PASSWORD: 'tigerpay_dev'
+    volumes:
+      - ./.volumes/auth/pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  tigerpay-payment-db:
+    image: 'postgres:latest'
+    container_name: 'tigerpay-payment-db'
+    hostname: 'tigerpay-payment-db'
+    networks:
+      - tigerpay-dev-network
+    environment:
+      POSTGRES_DB: 'tigerpay_payment_db'
+      POSTGRES_USER: 'tigerpay_dev'
+      POSTGRES_PASSWORD: 'tigerpay_dev'
+    volumes:
+      - ./.volumes/payment/pgdata:/var/lib/postgresql/data
+    ports:
+      - '5433:5432'
+
+  zookeeper:
+    <<: *zookeeper-common
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 9000
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - ./.volumes/zoo/data:/var/lib/zookeeper/data
+      - ./.volumes/zoo/log:/var/lib/zookeeper/log
+    ports:
+      - 9000:9000
+
+  kafka1:
+    <<: *kafka-common
+    container_name: kafka1
+    hostname: kafka1
+    restart: always
+    healthcheck:
+      test: echo 'ruok' | nc -z kafka1 9001 || exit 1
+      interval: 10s
+      retries: 25
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:9000
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9001,PLAINTEXT_HOST://localhost:29001
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+    volumes:
+      - ./.volumes/kafka1/data:/var/lib/kafka/data
+    ports:
+      - 9001:9001
+      - 29001:29001
+
+  kafka2:
+    <<: *kafka-common
+    container_name: kafka2
+    hostname: kafka2
+    restart: always
+    healthcheck:
+      test: echo 'ruok' | nc -z kafka2 9002 || exit 1
+      interval: 10s
+      retries: 25
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:9000
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9002,PLAINTEXT_HOST://localhost:29002
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+    volumes:
+      - ./.volumes/kafka2/data:/var/lib/kafka/data
+    ports:
+      - 9002:9002
+      - 29002:29002
+
+  kafka3:
+    <<: *kafka-common
+    container_name: kafka3
+    hostname: kafka3
+    restart: always
+    healthcheck:
+      test: echo 'ruok' | nc -z kafka3 9003 || exit 1
+      interval: 10s
+      retries: 25
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:9000
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9003,PLAINTEXT_HOST://localhost:29003
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+    volumes:
+      - ./.volumes/kafka3/data:/var/lib/kafka/data
+    ports:
+      - 9003:9003
+      - 29003:29003
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    hostname: kafka-ui
+    networks:
+      - tigerpay-dev-network
+    depends_on:
+      kafka1:
+        condition: service_healthy
+      kafka2:
+        condition: service_healthy
+      kafka3:
+        condition: service_healthy
+    environment:
+      KAFKA_CLUSTERS_0_NAME: tigerpay-kafka-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9001,kafka2:9002,kafka3:9003
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:9000
+    ports:
+      - 8088:8080
+
+  kafka-connect:
+    image: confluentinc/cp-kafka-connect:latest
+    container_name: kafka-connect
+    hostname: kafka-connect
+    depends_on:
+      - zookeeper
+      - kafka1
+      - kafka2
+      - kafka3
+    ports:
+      - '8083:8083'
+    networks:
+      - tigerpay-dev-network
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: 'kafka1:9001,kafka2:9002,kafka3:9003'
+      CONNECT_REST_PORT: '8083' 
+      CONNECT_GROUP_ID: 'local-connect'
+      CONNECT_CONFIG_STORAGE_TOPIC: 'local-connect-config'
+      CONNECT_OFFSET_STORAGE_TOPIC: 'local-connect-offsets'
+      CONNECT_STATUS_STORAGE_TOPIC: 'local-connect-status'
+      CONNECT_KEY_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+      CONNECT_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+      CONNECT_INTERNAL_KEY_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+      CONNECT_INTERNAL_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+      CONNECT_REST_ADVERTISED_HOST_NAME: 'localhost'
+      CONNECT_LOG4J_ROOT_LOGLEVEL: 'INFO'
+      CONNECT_PLUGIN_PATH: /usr/share/java/,/etc/kafka-connect/jars
+    volumes:
+      - ./.volumes/kafka-connect:/etc/kafka-connect/jars
+
+  clickhouse-data-mart:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse-data-mart
+    hostname: clickhouse-data-mart
+    ports:
+      - '8123:8123'
+      - '7000:7000'
+    networks:
+      - tigerpay-dev-network
+    environment:
+      CLICKHOUSE_USER: tigerpay_dev
+      CLICKHOUSE_PASSWORD: tigerpay_dev
+      CLICKHOUSE_DB: clickhouse_transfers_data_mart
+    volumes:
+      - ./.volumes/clickhouse/ch_data:/var/lib/clickhouse/
+      - ./.volumes/clickhouse/ch_logs:/var/lib/clickhouse-server/
+
+networks:
+  tigerpay-dev-network:
+    driver: bridge
+

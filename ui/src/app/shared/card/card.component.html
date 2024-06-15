@@ -1,0 +1,36 @@
+<div
+  class="
+         dark:border-[#222]
+         border-neutral-200
+         border-[1px]
+         w-full
+         rounded-2xl
+         h-full
+         px-5
+         py-4
+         min-h-36
+         shadow-2xl
+         shadow-black/10
+         dark:shadow-black
+         hover:scale-[1.01]
+         duration-200"
+  [ngClass]="{
+    'bg-neutral-300 dark:bg-neutral-950': !gradientBg,
+    'gradient-right': gradientBg && gridPosition === 'right',
+    'gradient-left': gradientBg && gridPosition === 'left',
+    'gradient-top': gradientBg && gridPosition === 'top',
+    'gradient-bottom': gradientBg && gridPosition === 'bottom',
+    'gradient-top-left': gradientBg && gridPosition === 'top-left',
+    'gradient-bottom-left': gradientBg && gridPosition === 'bottom-left',
+  }"
+>
+  <h1
+    class="text-lg font-bold mb-2 dark:text-white text-black"
+    *ngIf="displayTitle"
+  >
+    {{ title }}
+  </h1>
+  <div>
+    <ng-content></ng-content>
+  </div>
+</div>

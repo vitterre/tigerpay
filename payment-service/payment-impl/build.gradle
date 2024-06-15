@@ -1,0 +1,115 @@
+plugins {
+  id 'org.springframework.boot' version '3.2.5'
+  id 'io.spring.dependency-management' version '1.1.4'
+  id 'nu.studer.jooq' version '9.0'
+}
+
+dependencies {
+  implementation project(':payment-api')
+  implementation project(':payment-db')
+  implementation 'org.yaml:snakeyaml:2.2'
+  implementation 'com.tigerbeetle:tigerbeetle-java:0.15.3'
+  implementation 'org.liquibase:liquibase-core:4.27.0'
+  implementation 'com.zaxxer:HikariCP:5.1.0'
+  implementation 'org.postgresql:postgresql:42.7.3'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-starter-jooq'
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+  implementation 'org.springframework.kafka:spring-kafka'
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+  implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+  implementation 'io.jsonwebtoken:jjwt-impl:0.12.5'
+  implementation 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+}
+
+jooq {
+  version = '3.18.14'
+  edition = nu.studer.gradle.jooq.JooqEdition.OSS
+
+  dependencies {
+    jooqGenerator 'org.postgresql:postgresql:42.7.3'
+  }
+
+  configurations {
+    main {
+      generateSchemaSourceOnCompilation = false
+
+      generationTool {
+        logging = org.jooq.meta.jaxb.Logging.DEBUG
+
+        jdbc {
+          driver = 'org.postgresql.Driver'
+          url = 'jdbc:postgresql://localhost:5433/tigerpay_payment_db'
+          user = 'tigerpay_dev'
+          password = 'tigerpay_dev'
+        }
+
+        generator {
+          name = 'org.jooq.codegen.DefaultGenerator'
+
+          database {
+            inputSchema = 'public'
+            excludes = 'databasechangeloglock|databasechangelog|pgp_armor_headers'
+          }
+
+          generate {
+            routines = false
+            interfaces = false
+            daos = false
+            deprecated = false
+            records = false
+            pojos = true
+            relations = true
+            fluentSetters = true
+            pojosEqualsAndHashCode = true
+            pojosToString = true
+          }
+
+          target {
+            packageName = 'com.tigerpay.payment.model.jooq.schema'
+            directory = projectDir.toString() + '/src/main/jooq'
+            encoding = 'UTF-8'
+            locale = 'en'
+            clean = true
+          }
+
+          strategy {
+            name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+            matchers {
+              tables {
+                table {
+                  tableIdentifier {
+                    expression = '$0'
+                    transform = 'UPPER'
+                  }
+                  pojoClass {
+                    expression = '$0_Entity'
+                    transform = 'PASCAL'
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+generateJooq {
+  enabled = true
+  group = 'jooq'
+  allInputsDeclared = true
+  outputs.cacheIf { true }
+}
+
+cleanGenerateJooq {
+  enabled = true
+  group = 'jooq'
+}
+
+clean {
+  dependsOn cleanGenerateJooq
+}

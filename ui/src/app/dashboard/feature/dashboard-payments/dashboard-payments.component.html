@@ -1,0 +1,33 @@
+<app-modal>
+  <app-dashboard-transfer-form
+    [accountItems]="accountItems"
+  ></app-dashboard-transfer-form>
+</app-modal>
+
+<div
+  class="w-full
+         flex
+         flex-row"
+  [@fadeIn]
+>
+  <div
+    class="w-4/6
+           mx-auto
+           flex
+           flex-col"
+  >
+
+    <app-card
+      class="mt-8"
+      [gradientBg]="true"
+      gridPosition="bottom"
+      title="Transfer by account ID"
+    >
+      <app-input-button
+        type="ID"
+        name="Account ID"
+        (click)="modalService.open()"
+      ></app-input-button>
+    </app-card>
+  </div>
+</div>

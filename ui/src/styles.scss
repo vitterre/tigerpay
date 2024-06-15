@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  --light-grey: #d4d4d4;
+  --red: #ef4444;
+  --orange: #f97316;
+  --amber: #d97706;
+  --yellow: #eab308;
+  --lime: #84cc16;
+  --green: #22c55e;
+  --emerald: #10b981;
+  --teal: #14b8a6;
+  --cyan: #06b6d4;
+  --sky: #0ea5e9;
+  --blue: #3b82f6;
+  --indigo: #6366f1;
+  --violet: #8b5cf6;
+  --purple: #a855f7;
+  --fuchsia: #d946ef;
+  --pink: #ec4899;
+  --rose: #f43f5e;
+}
+
+body {
+  background-color: white;
+  color: black;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: black;
+    color: white;
+  }
+}
+
+* {
+  font-family: 'FK Grotesk Neue';
+}
+
+.monospaced {
+  font-family: 'SF Mono', 'Consolas', monospace;
+}
+
+.animate-on-loading {
+  animation: fadeInAnimation ease 0.25s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+h1 {
+  pointer-events: none;
+}
+
+.skeleton-loading {
+  display: inline-block;
+  animation: skeleton-loading 1s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: #d7d7d7;
+  }
+  50% {
+    background-color: #e7e7e7;
+  }
+  100% {
+    background-color: #d7d7d7;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: black;
+    color: white;
+  }
+  @keyframes skeleton-loading {
+    0% {
+      background-color: #282828;
+    }
+    50% {
+      background-color: #373737;
+    }
+    100% {
+      background-color: #282828;
+    }
+  }
+}

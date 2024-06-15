@@ -1,0 +1,85 @@
+<div
+  class="flex
+         flex-col
+         justify-center
+         px-48
+         mt-20
+         "
+>
+  <div class="flex flex-row">
+    <div
+      class="w-1/2
+             p-4
+             font-normal
+             flex
+             flex-col
+             justify-center"
+    >
+      <div class="flex flex-row">
+        <h1
+          class="text-6xl
+                 font-bold
+                 mb-2
+                 ml-10
+                 uppercase
+                 stroke-outline
+                 dark:text-black"
+        >
+          The <span class="text-black dark:text-white">fastest</span> and <span class="text-black dark:text-white">safest</span> paymest system ever <span class="text-black dark:text-white">existed</span>
+        </h1>
+      </div>
+      <h1
+        class="text-5xl
+               font-thin
+               ml-10
+               mt-5
+               uppercase
+             text-yellow-500"
+      >1000x faster</h1>
+      <p
+        class="text-lg
+               ml-10
+               text-black dark:text-white"
+      >Powered on
+        <a
+          href="https://tigerbeetle.com/"
+          class="font-medium
+                 hover:font-bold
+                 hover:scale-105
+                 duration-200
+                 cursor-pointer
+                 text-yellow-500"
+        >TigerBeetle</a>
+      </p>
+      
+    </div>
+    <div
+      class="w-1/2
+             p-4 
+             flex
+             flex-col
+             items-center
+             justify-center"
+    >
+      <img
+        [src]="getLogoSrc()"
+        alt="Image"
+        class="w-[28rem]
+              h-[28rem]
+              object-cover
+              absolute
+              -z-10
+              blur-sm
+              mr-4"
+      >
+      <img
+        [src]="getLogoSrc()"
+        alt="Image"
+        class="w-[28rem]
+               h-[28rem]
+               object-cover
+               mr-4"
+      >
+    </div>
+  </div>
+</div>

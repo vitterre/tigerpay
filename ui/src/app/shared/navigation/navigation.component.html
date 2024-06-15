@@ -1,0 +1,54 @@
+<nav
+  class="fixed
+         z-20
+         top-0
+         right-0
+         left-0
+         h-[50px]
+         flex
+         px-48
+         justify-between
+         items-center
+         backdrop-blur-sm
+         border-b
+         dark:border-[#222]
+         dark:text-white
+         dark:bg-black/50"
+>
+  <a
+    routerLink="/"
+    class="font-bold
+           text-lg
+           cursor-pointer
+           hover:font-extrabold
+           hover:scale-105
+           duration-200"
+  >TigerPay</a>
+
+  <span
+    class="flex
+           flex-row
+           justify-between"
+  >
+    <a
+      routerLink="/accounts/login"
+      class="mr-[30px]
+              hover:font-bold
+              hover:scale-105
+              duration-200"
+    >Log In</a>
+    <a
+      routerLink="/accounts/signup"
+      class="mr-[30px]
+              hover:font-bold
+              hover:scale-105
+              duration-200"
+    >Sign Up</a>
+    <a
+      routerLink="/"
+      class="hover:font-bold
+              hover:scale-105
+              duration-200"
+    >About</a>
+  </span>
+</nav>

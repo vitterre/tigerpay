@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: ./DDL/2024-05-31-init-payment-db.sql
+      relativeToChangelogFile: true
+  - include:
+      file: ./DML/2024-05-31-fill-counterparty-table.sql
+      relativeToChangelogFile: true

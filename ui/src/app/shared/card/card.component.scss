@@ -1,0 +1,49 @@
+.gradient-bottom-left {
+  background: radial-gradient(at top right, #efefef 5%, #f8f8f8);
+}
+
+.gradient-top-left {
+  background: radial-gradient(at bottom right, #efefef 5%, #f8f8f8);
+}
+
+.gradient-right {
+  background: radial-gradient(at left, #efefef 25%, #f8f8f8);
+}
+
+.gradient-left {
+  background: radial-gradient(at right, #efefef 25%, #f8f8f8);
+}
+
+.gradient-top {
+  background: radial-gradient(at bottom, #efefef 25%, #f8f8f8);
+}
+
+.gradient-bottom {
+  background: radial-gradient(at top, #efefef 25%, #f8f8f8);
+}
+
+@media (prefers-color-scheme: dark) {
+  .gradient-bottom-left {
+    background: radial-gradient(at top right, #121212 5%, #0a0a0a);
+  }
+  
+  .gradient-top-left {
+    background: radial-gradient(at bottom right, #121212 5%, #0a0a0a);
+  }
+  
+  .gradient-right {
+    background: radial-gradient(at left, #121212 25%, #0a0a0a);
+  }
+  
+  .gradient-left {
+    background: radial-gradient(at right, #121212 25%, #0a0a0a);
+  }
+  
+  .gradient-top {
+    background: radial-gradient(at bottom, #121212 25%, #0a0a0a);
+  }
+  
+  .gradient-bottom {
+    background: radial-gradient(at top, #121212 25%, #0a0a0a);
+  } 
+}

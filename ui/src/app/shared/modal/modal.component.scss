@@ -1,0 +1,8 @@
+.modal-container {
+  opacity: 0;
+  transition: opacity 0.3s; /* adjust duration to your liking */
+}
+
+.modal-container.show {
+  opacity: 1;
+}

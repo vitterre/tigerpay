@@ -1,0 +1,6 @@
+{
+  "files.watcherExclude": {
+    "**/target": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
