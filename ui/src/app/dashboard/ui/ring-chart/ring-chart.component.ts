@@ -26,6 +26,12 @@ export class RingChartComponent implements AfterViewInit {
   public ringRadius: number = this.radius * 0.8
 
   @Input()
+  public overrideTotalValue: string | null
+
+  @Input()
+  public overrideEmptyDataLabel: string = 'NO DATA'
+
+  @Input()
   public padding: number = 5
 
   private chartContainer: HTMLElement
@@ -38,7 +44,17 @@ export class RingChartComponent implements AfterViewInit {
 
   
   public ngAfterViewInit(): void {  
+    console.log('init ring chart')
     this.chartContainer = document.getElementById(this.name)!
+
+    if (this.data.length == 0) {
+      this.data.push({
+        label: this.overrideEmptyDataLabel,
+        value: 0,
+        alternativeValueLabel: this.overrideTotalValue
+      })
+      this.colors.push('grey')
+    }
     
     this.initialize()
     this.drawChart()
@@ -85,13 +101,13 @@ export class RingChartComponent implements AfterViewInit {
   }
 
   private initializeTopic() {
-    this.totalValue = this.data.reduce((acc, data) => acc + data.value, 0)
+    this.totalValue = Number(this.data.reduce((acc, data) => acc + data.value, 0).toFixed(2))
     this.topicValue = document.createElementNS('http://www.w3.org/2000/svg', 'text')
     this.topicValue.setAttribute('x', `${this.centerX}`)
     this.topicValue.setAttribute('y', `${this.centerY + 2}`)
     this.topicValue.setAttribute('text-anchor', 'middle')
-    this.topicValue.setAttribute('font-size', '24')
-    this.topicValue.textContent = `$${this.totalValue}`
+    this.topicValue.setAttribute('font-size', '20')
+    this.topicValue.textContent = `${this.overrideTotalValue ?? this.totalValue}`
     this.topicValue.classList.add('font-bold')
     this.topicValue.classList.add('dark:fill-white')
     this.topicValue.classList.add('fill-black')
@@ -103,7 +119,7 @@ export class RingChartComponent implements AfterViewInit {
     this.topicTitle.setAttribute('fill', '#aaa')
     this.topicTitle.setAttribute('text-anchor', 'middle')
     this.topicTitle.setAttribute('font-size', '12')
-    this.topicTitle.textContent = 'Total'
+    this.topicTitle.textContent = 'TOTAL'
     this.svg.appendChild(this.topicTitle)
   }
 
@@ -146,10 +162,8 @@ export class RingChartComponent implements AfterViewInit {
     endAngle: number,
     color: string,
     index: number,
-    data: IRingChartData
+    sliceData: IRingChartData
   ): void {
-    console.log(this.centerX, this.centerY, this.radius,
-      startAngle, endAngle, this.colors[index], index, data)
 
       const originalTopicValue = this.topicValue.textContent
       const originalTopicLabel = this.topicTitle.textContent
@@ -171,8 +185,8 @@ export class RingChartComponent implements AfterViewInit {
       path.addEventListener('mouseenter', () => {
         const hoverPathData = this.calculatePathData(centerX, centerY, enlargedRadius, startAngle, endAngle, largeArcFlag)
         path.setAttribute('d', hoverPathData)
-        this.topicValue.textContent = `$${data.value}`
-        this.topicTitle.textContent = `${data.label}`
+        this.topicValue.textContent = `${sliceData.alternativeValueLabel ?? sliceData.value}`
+        this.topicTitle.textContent = `${sliceData.label}`
       })
 
       path.addEventListener('mouseleave', () => {

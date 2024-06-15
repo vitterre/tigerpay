@@ -41,7 +41,7 @@ public final class AuthServiceImpl implements AuthService {
             final AccountRoleEntity accountRoleEntity
     ) {
         val data = new HashMap<String, Object>();
-        data.put("uuid", accountEntity.getUuid());
+        data.put("iss", accountEntity.getUuid().toString());
         data.put("role", accountRoleEntity.getKey());
         data.put("am", subject.name());
         return new TokenCoupleResponseDto(
@@ -147,7 +147,7 @@ public final class AuthServiceImpl implements AuthService {
 
         val data = new HashMap<String, Object>();
 
-        data.put("uuid", accountEntity.getUuid());
+        data.put("iss", accountEntity.getUuid().toString());
         data.put("role", roleEntity.getKey());
         data.put("am", Subject.PHONE_NUMBER);
 

@@ -20,8 +20,6 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -106,7 +104,7 @@ public class TransferTigerBeetleRepositoryImpl implements TransferRepository {
                             AccountLedger.getByLedger(transfers.getLedger()),
                             Objects.nonNull(TransferCode.getByCode(transfers.getCode())) ?
                                     TransferCode.getByCode(transfers.getCode()).name() :
-                                    TransferCode.TRANSFER.name(),
+                                    TransferCode.TRANSFERS.name(),
                             new Date(transfers.getTimestamp() / 1_000_000)
                     )
             );

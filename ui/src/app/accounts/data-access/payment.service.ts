@@ -1,7 +1,10 @@
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { Injectable, signal, WritableSignal } from '@angular/core'
-import { BehaviorSubject } from 'rxjs'
+import { BehaviorSubject, catchError, throwError } from 'rxjs'
+import { IDepositRequest } from '../../dashboard/data-access/IDepositRequest'
+import { IWithdrawalRequest } from '../../dashboard/data-access/IWithdrawalRequest'
 import { IPaymentAccountResponse } from './IPaymentAccountResponse'
+import { ITransferRequest } from './ITransferRequest'
 import { ITransferResponse } from './ITransferResponse'
 
 @Injectable({
@@ -45,7 +48,7 @@ export class PaymentService {
     localStorage.setItem('currentPaymentAccountIndex', `${index}`)
 
     this.httpClient
-      .get<Array<ITransferResponse>>(`http://localhost:7000/api/v1/payments/transfers?ledger=${this.getCurrentAccountState()?.ledger}`)
+      .get<Array<ITransferResponse>>(`http://localhost:7200/api/v1/payments/transfers?ledger=${this.getCurrentAccountState()?.ledger}`)
       .subscribe((response: Array<ITransferResponse>) => {
         this.updateTransfersState(response)
         console.log('updated')
@@ -70,6 +73,31 @@ export class PaymentService {
 
   public getTransfersState() {
     return this.transfersSignal()
+  }
+
+  public transfer(transferRequest: ITransferRequest) {
+    return this.httpClient
+      .post('http://localhost:7200/api/v1/payments/transfers', transferRequest)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 400) {
+            return throwError(() => new Error("You don't have enough balance"))
+          } else if (error.status === 404) {
+            return throwError(() => new Error("Receiver not found"))
+          }
+          return throwError(() => new Error(error.error.message))
+        })
+      )
+  }
+
+  public deposit(depositRequest: IDepositRequest) {
+    return this.httpClient
+      .post('http://localhost:7200/api/v1/payments/deposits', depositRequest)
+  }
+
+  public withdrawal(withdrawalRequest: IWithdrawalRequest) {
+    return this.httpClient
+      .post('http://localhost:7200/api/v1/payments/withdrawals', withdrawalRequest)
   }
 
 }

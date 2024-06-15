@@ -9,9 +9,9 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
   const authService = inject(AuthService);
   const token: string = localStorage.getItem('accessToken') ?? '';
   const exclude: Array<string> = [
-    'http://localhost:8000/api/v1/auth/register',
-    'http://localhost:8000/api/v1/auth/login',
-    'http://localhost:8000/api/v1/auth/refresh'
+    'http://localhost:7100/api/v1/auth/register',
+    'http://localhost:7100/api/v1/auth/login',
+    'http://localhost:7100/api/v1/auth/refresh'
   ];
 
   if (!exclude.includes(request.url)) {
@@ -37,11 +37,13 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
               });
               return next(request);
             } else {
+              localStorage.clear()
               authService.redirectToLogin();
               return throwError(() => error);
             }
           }),
           catchError(() => {
+            localStorage.clear()
             authService.redirectToLogin();
             return throwError(() => error);
           })

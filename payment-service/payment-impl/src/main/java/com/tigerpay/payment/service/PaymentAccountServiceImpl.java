@@ -5,6 +5,8 @@ import com.tigerpay.payment.dto.response.PaymentAccountResponseDto;
 import com.tigerpay.payment.enums.AccountCode;
 import com.tigerpay.payment.enums.AccountLedger;
 import com.tigerpay.payment.event.AccountCreatedEvent;
+import com.tigerpay.payment.exception.AccountNotFoundServiceException;
+import com.tigerpay.payment.model.PaymentAccountModel;
 import com.tigerpay.payment.model.jooq.schema.tables.pojos.PaymentAccountEntity;
 import com.tigerpay.payment.repository.PaymentAccountRepository;
 import com.tigerpay.payment.security.userdetails.Account;
@@ -16,7 +18,9 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +55,12 @@ public class PaymentAccountServiceImpl implements PaymentAccountService {
                 accounts.setId(id);
                 accounts.setCode(code);
                 accounts.setLedger(ledger.getLedger());
-                accounts.setUserData128(accounts.getUserData128());
+                accounts.setUserData128(UInt128.asBytes(accountCreatedEvent.uuid()));
                 accounts.setFlags(flags);
 
                 accountsMetadata.add(
                         new PaymentAccountEntity(
-                                generatedId.longValueExact(),
+                                generatedId.longValue(),
                                 code,
                                 ledger.getLedger(),
                                 accountCreatedEvent.phoneNumber(),
@@ -66,8 +70,31 @@ public class PaymentAccountServiceImpl implements PaymentAccountService {
             }
         }
 
+        System.out.println("CREATING ACCOUNTS: " + accountsMetadata.size());
         tigerBeetleClient.createAccounts(accounts);
         paymentAccountRepository.batchSave(accountsMetadata);
+    }
+
+    @SneakyThrows
+    @Override
+    public PaymentAccountModel getAccountById(final BigInteger id) {
+        val idBatch = new IdBatch(1);
+        idBatch.add(UInt128.asBytes(id));
+
+        val accounts = tigerBeetleClient.lookupAccounts(idBatch);
+
+        if (!accounts.next()) {
+            throw new AccountNotFoundServiceException(id);
+        }
+
+        return new PaymentAccountModel(
+                UInt128.asBigInteger(accounts.getId()),
+                AccountCode.getByCode(accounts.getCode()),
+                AccountLedger.getByLedger(accounts.getLedger()),
+                new BigDecimal(accounts.getDebitsPosted().subtract(accounts.getCreditsPosted()))
+                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.UNNECESSARY),
+                UInt128.asUUID(accounts.getUserData128())
+        );
     }
 
     @SneakyThrows

@@ -23,7 +23,7 @@ import java.util.UUID;
 
 @Configuration
 @PropertySource("classpath:kafka.yaml")
-public class KafkaConfig {
+public class KafkaConsumerConfig {
 
     @Value("${kafka.bootstrap-servers}")
     private String kafkaBootstrapServers;

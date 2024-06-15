@@ -9,7 +9,7 @@ import lombok.val;
 public enum TransferCode {
 
     WITHDRAWAL(1),
-    TRANSFER(2),
+    TRANSFERS(2),
     DEPOSIT(3),
     HOUSING(4),
     UTILITIES(5),

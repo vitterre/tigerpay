@@ -57,14 +57,14 @@ export class DashboardComponent implements OnInit {
   public ngOnInit(): void {
     console.log('Init dashboard shell')
     this.httpClient
-      .get<IAccount>('http://localhost:8000/api/v1/accounts/me')
+      .get<IAccount>('http://localhost:7100/api/v1/accounts/me')
       .subscribe((response: IAccount) => {
         setTimeout(() => {
           this.accountService.updateState(response)
         }, 900)
       })
     this.httpClient
-      .get<Array<IPaymentAccountResponse>>('http://localhost:7000/api/v1/payments/accounts')
+      .get<Array<IPaymentAccountResponse>>('http://localhost:7200/api/v1/payments/accounts')
       .subscribe((response: Array<IPaymentAccountResponse>) => {
         setTimeout(() => {
           this.paymentService.updateAccountsState(response)
@@ -78,7 +78,7 @@ export class DashboardComponent implements OnInit {
           });
 
           this.httpClient
-            .get<Array<ITransferResponse>>(`http://localhost:7000/api/v1/payments/transfers?ledger=${this.paymentService.getCurrentAccountState()?.ledger}`)
+            .get<Array<ITransferResponse>>(`http://localhost:7200/api/v1/payments/transfers?ledger=${this.paymentService.getCurrentAccountState()?.ledger}`)
             .subscribe((response: Array<ITransferResponse>) => {
               this.paymentService.updateTransfersState(response)
             })

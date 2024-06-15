@@ -1,0 +1,37 @@
+<form
+  class="flex
+         flex-col"
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+>
+  <h1
+    class="mx-auto
+           text-2xl
+           uppercase
+           font-bold
+           text-black
+           dark:text-white
+           mb-2"
+  >
+    Withdrawal
+  </h1>
+
+  <app-text-input
+    placeHolder="AMOUNT"
+    parentFormGroupName="amount"
+  ></app-text-input>
+
+  <app-input-dropdown
+    selectLabel="Account"
+    [items]="map(accountItems)"
+    [selectedIndex]="paymentService.getCurrentAccountIndexState() ?? 0"
+    (onSelect)="onSelectAccount($event)"
+    [showLabel]="true"
+  ></app-input-dropdown>
+
+  <app-button
+    class="mt-4"
+    type="submit"
+    label="SUBMIT"
+  ></app-button>
+</form>

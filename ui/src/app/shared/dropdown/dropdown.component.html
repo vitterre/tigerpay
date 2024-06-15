@@ -1,20 +1,28 @@
 <div
   class="w-40"
 >
-  <p
-    class="text-neutral-800
-           text-sm"
-  >
-    {{ selectLabel }}
-  </p>
+  @if (showLabel) {
+    <p
+      class="text-neutral-800
+             dark:text-neutral-400
+             text-sm"
+    >
+      {{ selectLabel }}
+    </p>
+  }
   
   <div
     class="border
            border-neutral-500
+           dark:border-neutral-700
            bg-neutral-200
+           dark:bg-neutral-900
            text-neutral-800
+           dark:text-neutral-400
            hover:border-neutral-600
+           hover:dark:border-neutral-600
            hover:bg-neutral-300
+           hover:dark:bg-neutral-800
            active:border-neutral-700
            active:bg-neutral-400
            duration-200
@@ -33,7 +41,7 @@
   >
     <h1
       class="text-sm
-            font-semibold"
+            font-medium"
     >
       {{ selectedItem.label }}
     </h1>
@@ -51,8 +59,11 @@
              border-l
              border-r
              border-neutral-500
+             dark:border-neutral-700
              bg-neutral-200
+             dark:bg-neutral-900
              text-neutral-800
+             dark:text-neutral-400
              rounded-b-md
              py-[2px]
              px-2
@@ -76,14 +87,15 @@
         >
           <h1
             class="text-sm
-                   font-semibold"
+                   font-medium"
           >
             {{ item.label }}
           </h1>
           <p
             class="text-[10px]
                    -mt-[6px]
-                   text-neutral-400"
+                   text-neutral-400
+                   dark:text-neutral-500"
           >
             {{ item.secondary }}
           </p>

@@ -1,6 +1,6 @@
 debug: true
 server:
-  port: 7000
+  port: 7200
 db:
   url: jdbc:postgresql://localhost:5433/tigerpay_payment_db
   hikari:

@@ -1,4 +1,5 @@
 export interface IRingChartData {
   label: string,
-  value: number
+  value: number,
+  alternativeValueLabel: string | null
 }

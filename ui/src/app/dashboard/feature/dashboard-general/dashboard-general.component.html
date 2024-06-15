@@ -1,3 +1,18 @@
+<app-modal>
+  @if (paymentService.areAccountsLoaded | async) {
+    @if (showDeposit) {
+      <app-dashboard-deposit
+        [accountItems]="accountItems"
+      ></app-dashboard-deposit>
+    }
+    @if (showWithdrawal) {
+      <app-dashboard-withdrawal
+        [accountItems]="accountItems"
+      ></app-dashboard-withdrawal>
+    }
+  }
+</app-modal>
+
 <div
   class="w-full
          flex
@@ -24,8 +39,8 @@
           <span
             class="relative fadeInAnimation"
             [ngClass]="{
-              'text-green-500': lastTransaction > 0,
-              'text-red-500': lastTransaction < 0
+              'text-green-500': paymentService.getTransfersState()?.length > 0 && paymentService.getTransfersState()[0].receiverId === paymentService.getCurrentAccountState()?.id,
+              'text-red-500': paymentService.getTransfersState()?.length > 0 && paymentService.getTransfersState()[0].senderId === paymentService.getCurrentAccountState()?.id
             }"
           >
             {{ paymentService.getCurrentAccountState()?.balance | currency:paymentService.getCurrentAccountState()?.ledger }}
@@ -40,17 +55,18 @@
                    opacity-25
                    blur-lg"
             [ngClass]="{
-              'bg-green-500': lastTransaction > 0,
-              'bg-red-500': lastTransaction < 0
+              'bg-green-500': paymentService.getTransfersState()?.length > 0 && paymentService.getTransfersState()[0].receiverId === paymentService.getCurrentAccountState()?.id,
+              'bg-red-500': paymentService.getTransfersState()?.length > 0 && paymentService.getTransfersState()[0].senderId === paymentService.getCurrentAccountState()?.id
             }"
           >
             {{ paymentService.getCurrentAccountState()?.balance | currency:paymentService.getCurrentAccountState()?.ledger }}
           </span>
         } @else {
           <span
-          class="skeleton-loading
-                 h-[29px]"
-          [style.width]="'120px'"
+            class="skeleton-loading
+                   rounded-md
+                  h-[29px]"
+            [style.width]="'120px'"
           ></span>
         }
       </h1>
@@ -69,6 +85,7 @@
       } @else {
         <span
           class="skeleton-loading
+                 rounded-md
                  h-[15px]
                  -mt-1"
           [style.width]="'40%'"
@@ -112,6 +129,7 @@
         } @else {
           <span
             class="skeleton-loading
+                   rounded-md
                    h-[29px]"
             [style.width]="'120px'"
           ></span>
@@ -128,6 +146,7 @@
       } @else {
         <span
         class="skeleton-loading
+               rounded-md
                h-[15px]
                -mt-1"
         [style.width]="'40%'"
@@ -167,6 +186,7 @@
       >
         <span
           class="skeleton-loading
+                 rounded-md
                  h-[20px]"
           [style.width]="'250px'"
           ></span>
@@ -182,6 +202,7 @@
       } @else {
         <span
           class="skeleton-loading
+                 rounded-md
                  h-[40px]"
           [style.width]="'160px'"
           ></span>
@@ -223,13 +244,13 @@
           class="w-[48%]"
           label="Deposit"
           [iconUrl]="getDepositIconSrc()"
-          (click)="''"
+          (click)="openDeposit()"
         ></app-card-button>
         <app-card-button
           class="w-[48%]"
           label="Withdrawal"
           [iconUrl]="getWithdrawalIconSrc()"
-          (click)="''"
+          (click)="openWithdrawal()"
         ></app-card-button>
       </div>
     </app-card>

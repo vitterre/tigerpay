@@ -2,3 +2,5 @@ kafka:
   bootstrap-servers: localhost:29001,localhost:29002,localhost:29003
   consumer:
     group-id: accounts-created-events-consumer-group
+  producer:
+    client-id: transfer-events-producer

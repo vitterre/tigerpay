@@ -26,7 +26,7 @@ public class JwtServiceImpl implements JwtService {
     private String jwtSecret;
 
     private SecretKey getSecretKey() {
-        val keyBytes = Decoders.BASE64.decode(jwtSecret);
+        val keyBytes = jwtSecret.getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -62,7 +62,7 @@ public class JwtServiceImpl implements JwtService {
 
             return Account.builder()
                     .uuid(
-                            UUID.fromString(claims.get("uuid", String.class))
+                            UUID.fromString(claims.get("iss", String.class))
                     )
                     .username(extractLogin(token))
                     .accessToken(token)

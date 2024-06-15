@@ -1,3 +1,9 @@
+<app-modal>
+  <app-dashboard-transfer-form
+    [accountItems]="accountItems"
+  ></app-dashboard-transfer-form>
+</app-modal>
+
 <div
   class="w-full
          flex
@@ -10,17 +16,6 @@
            flex
            flex-col"
   >
-    <app-card
-      [gradientBg]="true"
-      gridPosition="top"
-      title="Transfer by phone number"
-    >
-      <app-input-button
-        type="+1"
-        name="Phone number"
-        (click)="modalService.open()"
-      ></app-input-button>
-    </app-card>
 
     <app-card
       class="mt-8"
@@ -29,8 +24,8 @@
       title="Transfer by account ID"
     >
       <app-input-button
-        type="UUID"
-        name="Account UUID"
+        type="ID"
+        name="Account ID"
         (click)="modalService.open()"
       ></app-input-button>
     </app-card>

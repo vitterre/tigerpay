@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, signal } from '@angular/core'
 import { Router } from '@angular/router'
-import { Observable, catchError, throwError } from 'rxjs'
+import { catchError, Observable, throwError } from 'rxjs'
 import { IAuthResponse } from './IAuthResponse'
 import { ILogIn } from './ILogIn'
 import { ISignUp } from './ISignUp'
@@ -10,6 +10,8 @@ import { ISignUp } from './ISignUp'
   providedIn: 'any'
 })
 export class AuthService {
+
+  public currentUserSig = signal<IAuthResponse | undefined | null>(undefined)
 
   constructor(
     private httpClient: HttpClient,
@@ -20,7 +22,7 @@ export class AuthService {
     console.log(`Log In: ${JSON.stringify(loginRequest)}`)
 
     return this.httpClient
-      .post<IAuthResponse>('http://localhost:8000/api/v1/auth/login', loginRequest)
+      .post<IAuthResponse>('http://localhost:7100/api/v1/auth/login', loginRequest)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 400 || error.status === 401) {
@@ -36,7 +38,7 @@ export class AuthService {
     console.log(`Sign Up: ${JSON.stringify(signupRequest)}`)
 
     return this.httpClient
-      .post<IAuthResponse>('http://localhost:8000/api/v1/auth/register', signupRequest)
+      .post<IAuthResponse>('http://localhost:7100/api/v1/auth/register', signupRequest)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 400 || error.status === 409) {
@@ -50,7 +52,7 @@ export class AuthService {
 
   public refreshToken(): Observable<any> {
     return this.httpClient
-      .post<IAuthResponse>('http://localhost:8000/api/v1/auth/refresh', {
+      .post<IAuthResponse>('http://localhost:7100/api/v1/auth/refresh', {
         refreshToken: localStorage.getItem('refreshToken') ?? ''
       })
   }

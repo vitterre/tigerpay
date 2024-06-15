@@ -9,6 +9,10 @@ import { CardButtonComponent } from '../../../shared/card-button/card-button.com
 import { CardComponent } from '../../../shared/card/card.component'
 import { DropdownComponent } from '../../../shared/dropdown/dropdown.component'
 import { IDropdownElement } from '../../../shared/dropdown/IDropdownElement'
+import { ModalComponent } from '../../../shared/modal/modal.component'
+import { ModalService } from '../../../shared/modal/modal.service'
+import { DashboardDepositComponent } from '../dashboard-deposit/dashboard-deposit.component'
+import { DashboardWithdrawalComponent } from '../dashboard-withdrawal/dashboard-withdrawal.component'
 
 @Component({
   selector: 'app-dashboard-wallet',
@@ -18,7 +22,10 @@ import { IDropdownElement } from '../../../shared/dropdown/IDropdownElement'
     CardComponent,
     CopyTextComponent,
     CardButtonComponent,
-    DropdownComponent
+    DropdownComponent,
+    ModalComponent,
+    DashboardDepositComponent,
+    DashboardWithdrawalComponent
   ],
   providers: [
     CurrencyPipe
@@ -35,28 +42,20 @@ import { IDropdownElement } from '../../../shared/dropdown/IDropdownElement'
 })
 export class DashboardWalletComponent {
 
-  public readonly balance: number = 2000
-  public readonly lastTransaction: number = 123
-  public readonly transactionsThisMonth: number = 151
-  public readonly average: number = 28
-  public readonly accountFullName: string = 'Ivanov Ivan Ivanovich'
-  public readonly accountType: string = 'Individual'
-  public readonly accountUuid: string = 'lsdfjslkfjlskkjf'
-  public readonly accountPhoneNumber: string = '+123456789'
-
   @Input()
   public accountItems: Array<IDropdownElement> = []
-  
-  @Input()
-  public paymentService: PaymentService
 
   @Output()
   public tabHandler: EventEmitter<string> = new EventEmitter<string>()
 
+  public showDeposit = false
+  public showWithdrawal = false
+
   constructor(
     public accountService: AccountService,
     public httpClient: HttpClient,
-    private currencyPipe: CurrencyPipe
+    public paymentService: PaymentService,
+    public modalService: ModalService
   ) { }
 
   public onSelectItem(index: number) {
@@ -81,5 +80,17 @@ export class DashboardWalletComponent {
     } else {
       return '../assets/icons/withdrawal-dark.svg'
     }
+  }
+
+  public openDeposit() {
+    this.showDeposit = true
+    this.showWithdrawal = false
+    this.modalService.open()
+  }
+
+  public openWithdrawal() {
+    this.showDeposit = false
+    this.showWithdrawal = true
+    this.modalService.open()
   }
 }

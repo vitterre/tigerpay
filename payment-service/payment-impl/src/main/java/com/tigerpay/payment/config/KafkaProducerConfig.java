@@ -1,6 +1,6 @@
-package com.tigerpay.auth.config;
+package com.tigerpay.payment.config;
 
-import com.tigerpay.auth.event.AccountCreatedEvent;
+import com.tigerpay.payment.event.TransferEvent;
 import lombok.val;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.UUIDSerializer;
@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @Configuration
 @PropertySource("classpath:kafka.yaml")
-public class KafkaConfig {
+public class KafkaProducerConfig {
 
     @Value("${kafka.bootstrap-servers}")
     private String kafkaBootstrapServers;
@@ -41,13 +41,13 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ProducerFactory<UUID, AccountCreatedEvent> producerAccountEventFactory() {
+    public ProducerFactory<UUID, TransferEvent> producerTransferEventFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
     @Bean
-    public KafkaTemplate<UUID, AccountCreatedEvent> kafkaAccountCreatedEventTemplate() {
-        val template = new KafkaTemplate<>(producerAccountEventFactory());
+    public KafkaTemplate<UUID, TransferEvent> kafkaTransferEventTemplate() {
+        val template = new KafkaTemplate<>(producerTransferEventFactory());
         template.setMessageConverter(new StringJsonMessageConverter());
         return template;
     }

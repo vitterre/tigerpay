@@ -34,7 +34,7 @@ public final class JwtServiceImpl implements JwtService {
     private Long expirationAccess;
 
     private SecretKey getSecretKey() {
-        val keyBytes = Decoders.BASE64.decode(jwtSecret);
+        val keyBytes = jwtSecret.getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -65,7 +65,7 @@ public final class JwtServiceImpl implements JwtService {
         }
 
         return Account.builder()
-                .uuid(UUID.fromString(claims.get("uuid", String.class)))
+                .uuid(UUID.fromString(claims.get("iss", String.class)))
                 .username(extractLogin(token))
                 .subject(Subject.valueOf(claims.get("am", String.class)))
                 .role(Role.valueOf(claims.get("role", String.class)))

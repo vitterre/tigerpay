@@ -9,8 +9,28 @@
            flex
            flex-col"
   >
+    <div
+      class="flex flex-row gap-3"
+    >
+      <app-dropdown
+        class="z-10"
+        selectLabel="Account"
+        [items]="accountItems"
+        [selectedIndex]="paymentService.getCurrentAccountIndexState() ?? 0"
+        (onSelect)="onSelectAccount($event)"
+        [showLabel]="false"
+      ></app-dropdown>
+      <app-dropdown
+        class="z-10"
+        selectLabel="Period"
+        [items]="periodItems"
+        [selectedIndex]="0"
+        (onSelect)="onSelectPeriod($event)"
+        [showLabel]="false"
+      ></app-dropdown>
+    </div>
     <app-card
-      class="w-full"
+      class="w-full mt-3"
       [gradientBg]="true"
       gridPosition="top"
       title="Expense"
@@ -40,12 +60,41 @@
                    flex-wrap
                    gap-1"
           >
-            <app-tag
-              *ngFor="let tag of expenseTagData; let i = index"
-              [tag]="tag.tag"
-              [color]="expenseTagColors[i]"
-              [extra]="tag.extra"
-            ></app-tag>
+            @if (operationsService.isDataLoaded | async) {
+              @if (expenseTagData && expenseTagData.length != 0) {
+                <app-tag
+                  *ngFor="let tag of expenseTagData; let i = index"
+                  [tag]="tag.tag"
+                  [color]="expenseTagColors[i]"
+                  [extra]="tag.extra"
+                ></app-tag>
+              } @else {
+                <h1
+                  class="text-neutral-700"
+                >
+                  You don't have any expense at this period yet
+                </h1>
+              }
+            } @else {
+              <span
+                class="skeleton-loading
+                       rounded-md
+                      h-6"
+                [style.width]="'90px'"
+              ></span>
+              <span
+                class="skeleton-loading
+                       rounded-md
+                      h-6"
+                [style.width]="'100px'"
+              ></span>
+              <span
+                class="skeleton-loading
+                       rounded-md
+                      h-6"
+                [style.width]="'120px'"
+              ></span>
+            }
           </div>
         </div>
 
@@ -54,12 +103,23 @@
                  flex
                  flex-row-reverse"
         >
-          <app-ring-chart
-            name="expense"
-            class="w-fit"
-            [data]="expenseChartData"
-            [colors]="expenseChartColors"
-          ></app-ring-chart>
+          @if (operationsService.isDataLoaded | async) {
+            <app-ring-chart
+              name="expense"
+              class="w-fit"
+              [data]="expenseChartData"
+              [colors]="expenseChartColors"
+              overrideEmptyDataLabel="NO TRANSFERS"
+              [overrideTotalValue]="expenseChartTotalValue"
+            ></app-ring-chart>
+          } @else {
+            <span
+              class="skeleton-loading
+                     h-[170px]
+                     rounded-full"
+              [style.width]="'170px'"
+            ></span>
+          }
         </div>
       </div>
     </app-card>
@@ -96,12 +156,41 @@
                    flex-wrap
                    gap-1"
           >
-          <app-tag
-            *ngFor="let tag of revenueTagData; let i = index"
-            [tag]="tag.tag"
-            [color]="revenueTagColors[i]"
-            [extra]="tag.extra"
-          ></app-tag>
+          @if (operationsService.isDataLoaded | async) {
+            @if (revenueTagData && revenueTagData.length != 0) {
+              <app-tag
+                *ngFor="let tag of revenueTagData; let i = index"
+                [tag]="tag.tag"
+                [color]="revenueTagColors[i]"
+                [extra]="tag.extra"
+              ></app-tag>
+            } @else {
+              <h1
+                class="text-neutral-700"
+              >
+                You don't have any revenue at this period yet
+              </h1>
+            }
+          } @else {
+            <span
+              class="skeleton-loading
+                      rounded-md
+                    h-6"
+              [style.width]="'90px'"
+            ></span>
+            <span
+              class="skeleton-loading
+                      rounded-md
+                    h-6"
+              [style.width]="'100px'"
+            ></span>
+            <span
+              class="skeleton-loading
+                      rounded-md
+                    h-6"
+              [style.width]="'120px'"
+            ></span>
+          }
           </div>
         </div>
 
@@ -110,12 +199,23 @@
                  flex
                  flex-row-reverse"
         >
-          <app-ring-chart
-            name="revenue"
-            class="w-fit"
-            [data]="revenueChartData"
-            [colors]="revenueChartColors"
-          ></app-ring-chart>
+          @if (operationsService.isDataLoaded | async) {
+            <app-ring-chart
+              name="revenue"
+              class="w-fit"
+              [data]="revenueChartData"
+              [colors]="revenueChartColors"
+              overrideEmptyDataLabel="NO TRANSFERS"
+              [overrideTotalValue]="revenueChartTotalValue"
+            ></app-ring-chart>
+          } @else {
+            <span
+              class="skeleton-loading
+                     h-[170px]
+                     rounded-full"
+              [style.width]="'170px'"
+            ></span>
+          }
         </div>
       </div>
     </app-card>

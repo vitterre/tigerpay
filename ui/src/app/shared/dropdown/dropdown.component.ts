@@ -30,6 +30,9 @@ export class DropdownComponent implements OnInit {
   public selectLabel: string = 'Select item'
 
   @Input()
+  public showLabel: boolean = true
+
+  @Input()
   public selectedIndex: number = 0
   
   @Input()

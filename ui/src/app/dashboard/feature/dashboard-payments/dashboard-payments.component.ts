@@ -2,8 +2,11 @@ import { animate, style, transition, trigger } from '@angular/animations'
 import { CommonModule } from '@angular/common'
 import { Component, Input } from '@angular/core'
 import { CardComponent } from '../../../shared/card/card.component'
+import { IDropdownElement } from '../../../shared/dropdown/IDropdownElement'
 import { InputButtonComponent } from '../../../shared/input-button/input-button.component'
+import { ModalComponent } from '../../../shared/modal/modal.component'
 import { ModalService } from '../../../shared/modal/modal.service'
+import { DashboardTransferFormComponent } from '../dashboard-transfer/dashboard-transfer-form.component'
 
 @Component({
   selector: 'app-dashboard-payments',
@@ -11,7 +14,9 @@ import { ModalService } from '../../../shared/modal/modal.service'
   imports: [
     CommonModule,
     CardComponent,
-    InputButtonComponent
+    InputButtonComponent,
+    ModalComponent,
+    DashboardTransferFormComponent
   ],
   templateUrl: './dashboard-payments.component.html',
   animations: [
@@ -24,6 +29,9 @@ import { ModalService } from '../../../shared/modal/modal.service'
   ]
 })
 export class DashboardPaymentsComponent {
+
+  @Input()
+  public accountItems: IDropdownElement[] = []
   
   @Input()
   public modalService: ModalService

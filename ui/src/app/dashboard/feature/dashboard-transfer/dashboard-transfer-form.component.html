@@ -15,69 +15,51 @@
            mb-2"
   >Transfer money</h1>
   
-  <!-- <input
-    type="text"
-    class="border
-         border-white
-         bg-black
-           focus:outline-1
-           py-2
-           px-4
-           w-full"
-    placeholder="Phone number"
-    formControlName="phoneNumber"
-  > -->
-  <app-text-input
+  <!-- <app-text-input
     placeHolder="PHONE NUMBER"
     parentFormGroupName="phoneNumber"
   ></app-text-input>
+  
   <p
     class="mx-auto
            mb-4
            text-neutral-600"
-  >or</p>
-  <!-- <input
-    type="text"
-    class="border
-         border-white
-         bg-black
-           focus:outline-1
-           py-2
-           px-4
-           mt-2
-           w-full"
-    placeholder="Account UUID"
-    formControlName="accountUuid"
-  > -->
+  >or</p> -->
+
   <app-text-input
-    placeHolder="ACCOUNT UUID"
+    placeHolder="ACCOUNT ID"
     parentFormGroupName="accountUuid"
   ></app-text-input>
-  <!-- <input
-    type="text"
-    class="border
-         border-white
-         bg-black
-           focus:outline-1
-           py-2
-           px-4
-           mt-5
-           w-full"
-    placeholder="Amount"
-    formControlName="amount"
-  > -->
+
   <app-text-input
     placeHolder="AMOUNT"
     parentFormGroupName="amount"
   ></app-text-input>
-  <app-checkbox
+
+  <app-input-dropdown
+    selectLabel="Account"
+    [items]="map(accountItems)"
+    [selectedIndex]="paymentService.getCurrentAccountIndexState() ?? 0"
+    (onSelect)="onSelectAccount($event)"
+    [showLabel]="true"
+  ></app-input-dropdown>
+  
+  <app-input-dropdown
+    selectLabel="Category"
+    [items]="mapCategories(categories)"
+    [selectedIndex]="selectedCategoryIndex"
+    (onSelect)="onSelectCategory($event)"
+    [showLabel]="true"
+  ></app-input-dropdown>
+
+  <!-- <app-checkbox
     label="Create bill"
     parentFormGroupName="sendBill"
-  ></app-checkbox>
+  ></app-checkbox> -->
   <app-button
     class="mt-4"
     type="submit"
-    [disabledCondition]="this.form.invalid || (this.form.value.phoneNumber === '' && this.form.value.accountUuid === '')"
+    [disabledCondition]="this.form.invalid || (this.form.value.phoneNumber === '' && !this.form.value.accountUuid)"
     label="Transfer"
   >
   </app-button>

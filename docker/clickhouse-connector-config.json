@@ -1,0 +1,18 @@
+{
+  "name": "clickhouse-connector",
+  "config": {
+    "connector.class": "com.clickhouse.kafka.connect.ClickHouseSinkConnector",
+    "tasks.max": "1",
+    "database": "clickhouse_transfers_data_mart",
+    "hostname": "clickhouse-data-mart",
+    "port": "8123",
+    "ssl": "false",
+    "username": "tigerpay_dev",
+    "password": "tigerpay_dev",
+    "topics": "sink-transfer-events",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "topic2TableMap": "sink-transfer-events=transfers"
+  }
+}
